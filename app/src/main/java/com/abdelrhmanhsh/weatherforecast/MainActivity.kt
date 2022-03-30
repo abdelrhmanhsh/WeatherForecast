@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
-import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,8 +25,10 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import android.location.Geocoder
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
+import kotlinx.coroutines.launch
 import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var userPreferences: UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         getLastLocation()
 
         firebaseAnalytics = Firebase.analytics
-
+        userPreferences = UserPreferences(this)
     }
 
     private fun initNavDrawer(){
@@ -89,12 +91,12 @@ class MainActivity : AppCompatActivity() {
                         val geocoder = Geocoder(this, Locale.getDefault())
                         val addresses: List<Address> = geocoder.getFromLocation(location.result.latitude, location.result.longitude, 1)
 
-                        val cityName: String = addresses[0].getAddressLine(0) ?: ""
-                        val stateName: String = addresses[0].getAddressLine(1) ?: ""
-                        val countryName: String = addresses[0].getAddressLine(2) ?: ""
-
                         val city: String = addresses[0].locality ?: ""
                         val country: String = addresses[0].countryName ?: ""
+
+                        lifecycleScope.launch {
+                            userPreferences.storeLongLatPref(location.result.latitude, location.result.longitude)
+                        }
 
                         Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
                     }

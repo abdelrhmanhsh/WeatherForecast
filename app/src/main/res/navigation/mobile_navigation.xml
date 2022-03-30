@@ -15,14 +15,32 @@
         android:name="com.abdelrhmanhsh.weatherforecast.ui.FavouritesFragment"
         android:label="fragment_favourites"
         tools:layout="@layout/fragment_favourites" />
+
     <fragment
         android:id="@+id/alertsFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.AlertsFragment"
         android:label="fragment_alerts"
         tools:layout="@layout/fragment_alerts" />
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+
+        <action
+            android:id="@+id/action_settingsFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.abdelrhmanhsh.weatherforecast.ui.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

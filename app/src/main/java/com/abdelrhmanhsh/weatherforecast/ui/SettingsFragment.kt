@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.navigation.Navigation
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentHomeBinding
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentSettingsBinding
@@ -21,4 +23,13 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.radioMap.setOnCheckedChangeListener { p0, p1 ->
+            val action = SettingsFragmentDirections.actionSettingsFragmentToMapsFragment()
+            Navigation.findNavController(view).navigate(action)
+        }
+
+    }
 }
