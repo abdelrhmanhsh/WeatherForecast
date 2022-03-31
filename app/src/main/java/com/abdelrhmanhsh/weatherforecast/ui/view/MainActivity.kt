@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast
+package com.abdelrhmanhsh.weatherforecast.ui.view
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -26,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 import android.location.Geocoder
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
 import kotlinx.coroutines.launch
 import java.util.*
@@ -60,7 +61,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavDrawer(){
-        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.nav_open, R.string.nav_close)
+        toggle = ActionBarDrawerToggle(this, binding.drawerLayout,
+            R.string.nav_open,
+            R.string.nav_close
+        )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -94,7 +98,9 @@ class MainActivity : AppCompatActivity() {
                         val city: String = addresses[0].locality ?: ""
                         val country: String = addresses[0].countryName ?: ""
 
+                        // take 15
                         lifecycleScope.launch {
+                            userPreferences.storeUserLocationPref("$city, $country")
                             userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
                         }
 

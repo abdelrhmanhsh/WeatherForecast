@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast.ui
+package com.abdelrhmanhsh.weatherforecast.ui.view
 
 import android.location.Address
 import android.location.Geocoder

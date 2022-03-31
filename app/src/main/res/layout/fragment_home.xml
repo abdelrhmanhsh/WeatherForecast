@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.HomeFragment"
+    tools:context=".ui.view.HomeFragment"
     android:background="#474646">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
 
         <!-- current weather -->
         <TextView
-            android:id="@+id/text_location"
+            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
             android:id="@+id/current_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/text_location"
+            app:layout_constraintTop_toBottomOf="@id/location"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="14sp"
             android:textColor="@color/white"
@@ -76,7 +76,7 @@
             android:id="@+id/current_weather_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/text_location"
+            app:layout_constraintTop_toBottomOf="@id/location"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@mipmap/ic_launcher"
             android:padding="18dp"
@@ -114,7 +114,6 @@
             android:layout_marginBottom="15dp"/>
 
         <!-- more info -->
-
         <LinearLayout
             android:id="@+id/linear_more"
             android:layout_width="match_parent"

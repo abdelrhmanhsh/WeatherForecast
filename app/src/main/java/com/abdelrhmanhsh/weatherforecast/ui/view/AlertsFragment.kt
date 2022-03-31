@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast.ui
+package com.abdelrhmanhsh.weatherforecast.ui.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
