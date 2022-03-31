@@ -95,10 +95,11 @@ class MainActivity : AppCompatActivity() {
                         val country: String = addresses[0].countryName ?: ""
 
                         lifecycleScope.launch {
-                            userPreferences.storeLongLatPref(location.result.latitude, location.result.longitude)
+                            userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
                         }
 
                         Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+                        Log.i(TAG, "getLastLocation: Latitude: ${location.result.latitude}, Longitude: ${location.result.longitude}")
                     }
                 }
             }

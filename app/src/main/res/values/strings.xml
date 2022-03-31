@@ -9,4 +9,28 @@
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
 
+    <!-- settings fragment -->
+    <string name="location">Location</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="temperature">Temperature</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="meter_per_sec">Meter / Sec</string>
+    <string name="mile_per_hour">Mile / Hour</string>
+
+    <!-- home fragment -->
+    <string name="feels_like">Feels like</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="cloud">Cloud</string>
+    <string name="ultra_violet">Ultra Violet</string>
+    <string name="visibility">Visibility</string>
+
 </resources>

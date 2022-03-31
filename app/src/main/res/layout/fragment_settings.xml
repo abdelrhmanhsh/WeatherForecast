@@ -9,7 +9,7 @@
     android:layout_margin="15dp">
 
     <LinearLayout
-        android:id="@+id/card_location"
+        android:id="@+id/linear_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,27 +21,24 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Location"
+            android:text="@string/location"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:gravity="center"/>
 
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_location">
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/radio_gps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GPS"
+                android:text="@string/gps"
                 android:textColor="@color/white"
                 android:checked="true"/>
 
@@ -49,32 +46,148 @@
                 android:id="@+id/radio_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Map"
+                android:text="@string/map"
                 android:textColor="@color/white"/>
 
         </RadioGroup>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linear_language"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_margin="15dp"
+        android:padding="15dp"
+        android:background="@drawable/settings_radio_group_background"
+        android:orientation="vertical">
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/card_language"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHeight_percent="0.3"-->
-<!--        app:layout_constraintWidth_percent="0.4"-->
-<!--        android:layout_margin="15dp">-->
+        <TextView
+            android:id="@+id/text_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:gravity="center"/>
 
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <RadioButton
+                android:id="@+id/radio_english"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/english"
+                android:textColor="@color/white"
+                android:checked="true"/>
 
-<!--    </androidx.cardview.widget.CardView>-->
+            <RadioButton
+                android:id="@+id/radio_arabic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/arabic"
+                android:textColor="@color/white"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Settings Fragment"
-        android:gravity="center" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_temperature"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linear_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_margin="15dp"
+        android:padding="15dp"
+        android:background="@drawable/settings_radio_group_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/temperature"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radio_celsius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/celsius"
+                android:textColor="@color/white"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radio_kelvin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kelvin"
+                android:textColor="@color/white"/>
+
+            <RadioButton
+                android:id="@+id/radio_fahrenheit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fahrenheit"
+                android:textColor="@color/white"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_wind_speed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linear_language"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_margin="15dp"
+        android:padding="15dp"
+        android:background="@drawable/settings_radio_group_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wind_speed"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radio_meter_per_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/meter_per_sec"
+                android:textColor="@color/white"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radio_mile_per_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mile_per_hour"
+                android:textColor="@color/white"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

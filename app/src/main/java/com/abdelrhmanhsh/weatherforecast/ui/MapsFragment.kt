@@ -1,8 +1,11 @@
 package com.abdelrhmanhsh.weatherforecast.ui
 
+import android.location.Address
+import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +20,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.util.*
 
 class MapsFragment : Fragment() {
 
@@ -28,15 +33,38 @@ class MapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { googleMap ->
 
         lifecycleScope.launch {
-            val latitude = userPreferences.readLatitude() ?: 0.0
-            val longitude = userPreferences.readLongitude() ?: 0.0
+            val latitude = userPreferences.readGPSLatitude() ?: 0.0
+            val longitude = userPreferences.readGPSLongitude() ?: 0.0
             println("Latitude Pref: $latitude Longitude: $longitude")
 
             val myLocation = LatLng(latitude, longitude)
             googleMap.addMarker(MarkerOptions().position(myLocation))
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 10F))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 5F))
         }
 
+        googleMap.setOnMapClickListener {
+            println("On map click: lat: ${it.latitude}, long: ${it.longitude}")
+
+            var city = ""
+            var country = ""
+
+            try {
+                val geocoder = Geocoder(context, Locale.getDefault())
+                val addresses: List<Address> = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+
+                city = addresses[0].locality ?: ""
+                country = addresses[0].countryName ?: ""
+
+                Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+            } catch (e: IOException){
+                Log.e(TAG, "error: ${e.message}")
+            }
+
+            val loc = LatLng(it.latitude, it.longitude)
+            googleMap.addMarker(MarkerOptions().position(loc).title(city))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc))
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(10F))
+        }
     }
 
     override fun onCreateView(
