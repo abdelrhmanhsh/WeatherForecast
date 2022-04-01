@@ -5,6 +5,6 @@ import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 
 interface RemoteSource {
 
-    fun getWeather(latitude: Double, longitude: Double, exclude: String, apiKey: String): LiveData<WeatherResponse>
+    fun getWeather(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<WeatherResponse>
 
 }

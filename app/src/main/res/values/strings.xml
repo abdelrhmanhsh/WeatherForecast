@@ -32,5 +32,16 @@
     <string name="cloud">Cloud</string>
     <string name="ultra_violet">Ultra Violet</string>
     <string name="visibility">Visibility</string>
+    <string name="metric">metric</string>
+    <string name="imperial">imperial</string>
+    <string name="hpa">hpa</string>
+    <string name="m_per_s">m/s</string>
+    <string name="m_per_h">m/h</string>
+    <string name="m">m</string>
+
+    <!-- dialog -->
+    <string name="add_this_location">Add this location</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

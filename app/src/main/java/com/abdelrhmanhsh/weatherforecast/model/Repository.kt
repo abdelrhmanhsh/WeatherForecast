@@ -27,7 +27,7 @@ class Repository(
         }
     }
 
-    override fun getWeather(latitude: Double, longitude: Double, exclude: String, apiKey: String): LiveData<WeatherResponse> {
-        return remoteSource.getWeather(latitude, longitude, exclude, apiKey)
+    override fun getWeather(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<WeatherResponse> {
+        return remoteSource.getWeather(latitude, longitude, units, lang, apiKey)
     }
 }

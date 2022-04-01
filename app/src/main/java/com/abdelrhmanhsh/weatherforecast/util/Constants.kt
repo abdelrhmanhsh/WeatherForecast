@@ -5,11 +5,13 @@ class Constants {
     companion object {
 
         const val BASE_URL = "https://api.openweathermap.org/"
+        const val IMAGE_BASE_URL = "http://openweathermap.org/img/wn/"
 
         const val LOCATION_PERMISSION_ID = 1
 
         const val USER_PREFERENCES_NAME = "user_preferences"
-        const val USER_LOCATION_KEY = "user_location_key"
+        const val USER_GPS_LOCATION_KEY = "user_gps_location_key"
+        const val USER_MAP_LOCATION_KEY = "user_map_location_key"
         const val GPS_LATITUDE_PREFERENCE_KEY = "gps_latitude_key"
         const val GPS_LONGITUDE_PREFERENCE_KEY = "gps_longitude_key"
         const val MAP_LATITUDE_PREFERENCE_KEY = "map_latitude_key"

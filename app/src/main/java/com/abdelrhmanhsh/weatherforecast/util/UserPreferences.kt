@@ -16,7 +16,8 @@ class UserPreferences(val context: Context) {
     private val dataStore = context.dataStore
 
     companion object {
-        private val userLocationPref = stringPreferencesKey(Constants.USER_LOCATION_KEY)
+        private val userGPSLocationPref = stringPreferencesKey(Constants.USER_GPS_LOCATION_KEY)
+        private val userMapLocationPref = stringPreferencesKey(Constants.USER_MAP_LOCATION_KEY)
         private val gpsLatitudePref = doublePreferencesKey(Constants.GPS_LATITUDE_PREFERENCE_KEY)
         private val gpsLongitudePref = doublePreferencesKey(Constants.GPS_LONGITUDE_PREFERENCE_KEY)
         private val mapLatitudePref = doublePreferencesKey(Constants.MAP_LATITUDE_PREFERENCE_KEY)
@@ -28,9 +29,15 @@ class UserPreferences(val context: Context) {
         private val windSpeedPref = stringPreferencesKey(Constants.WIND_SPEED_PREFERENCE_KEY)
     }
 
-    suspend fun storeUserLocationPref(location: String){
+    suspend fun storeUserGPSLocationPref(location: String){
         dataStore.edit {
-            it[userLocationPref] = location
+            it[userGPSLocationPref] = location
+        }
+    }
+
+    suspend fun storeUserMapLocationPref(location: String){
+        dataStore.edit {
+            it[userMapLocationPref] = location
         }
     }
 
@@ -72,9 +79,14 @@ class UserPreferences(val context: Context) {
         }
     }
 
-    suspend fun readUserLocation(): String?{
+    suspend fun readUserGPSLocation(): String?{
         val location = dataStore.data.first()
-        return location[userLocationPref]
+        return location[userGPSLocationPref]
+    }
+
+    suspend fun readUserMapLocation(): String?{
+        val location = dataStore.data.first()
+        return location[userMapLocationPref]
     }
 
     suspend fun readGPSLatitude(): Double?{

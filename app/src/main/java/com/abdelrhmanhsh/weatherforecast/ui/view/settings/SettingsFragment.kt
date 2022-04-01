@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast.ui.view
+package com.abdelrhmanhsh.weatherforecast.ui.view.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -45,10 +45,10 @@ class SettingsFragment : Fragment(), View.OnClickListener{
 
     private fun settingRadioButtons() {
         lifecycleScope.launch {
-            val locationSelection = userPreferences.readLocation()
-            val languageSelection = userPreferences.readLanguage()
-            val temperatureSelection = userPreferences.readTemperature()
-            val windSpeedSelection = userPreferences.readWindSpeed()
+            val locationSelection = userPreferences.readLocation() ?: getString(R.string.gps)
+            val languageSelection = userPreferences.readLanguage() ?: getString(R.string.english)
+            val temperatureSelection = userPreferences.readTemperature() ?: getString(R.string.celsius)
+            val windSpeedSelection = userPreferences.readWindSpeed() ?: getString(R.string.meter_per_sec)
 
             println("PREFS: $locationSelection $languageSelection $temperatureSelection $windSpeedSelection")
 
@@ -89,7 +89,8 @@ class SettingsFragment : Fragment(), View.OnClickListener{
             userPreferences.storeLocationPref(selection)
         }
         if(selection == getString(R.string.map)){
-            val action = SettingsFragmentDirections.actionSettingsFragmentToMapsFragment()
+            val action =
+                SettingsFragmentDirections.actionSettingsFragmentToMapsFragment()
             Navigation.findNavController(view).navigate(action)
         }
     }

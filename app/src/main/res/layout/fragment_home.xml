@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.view.HomeFragment"
+    tools:context=".ui.view.home.HomeFragment"
     android:background="#474646">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Alexandria"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -31,7 +30,6 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="14sp"
             android:textColor="@color/white"
-            android:text="March 31, 1:51 AM"
             android:padding="6dp"
             android:layout_marginStart="6dp"/>
 
@@ -56,7 +54,6 @@
             android:textSize="52sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="12 C"
             android:padding="6dp"
             android:layout_marginStart="6dp" />
 
@@ -68,19 +65,19 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="14sp"
             android:textColor="@color/white"
-            android:text="Feels like 12"
             android:padding="6dp"
             android:layout_marginStart="6dp"/>
 
         <ImageView
             android:id="@+id/current_weather_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/location"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@mipmap/ic_launcher"
-            android:padding="18dp"
-            android:layout_marginTop="18dp"/>
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintHeight_percent="0.1"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"/>
 
         <TextView
             android:id="@+id/current_weather_desc"
@@ -90,7 +87,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="20sp"
             android:textColor="@color/white"
-            android:text="Clear Sky"
             android:padding="12dp" />
 
 
@@ -133,15 +129,14 @@
                     android:id="@+id/image_pressure"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/pressure" />
 
                 <TextView
                     android:id="@+id/current_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="1021 hpa" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -163,15 +158,14 @@
                     android:id="@+id/image_humidity"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/humidity" />
 
                 <TextView
                     android:id="@+id/current_humidity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="77%" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -193,15 +187,14 @@
                     android:id="@+id/image_wind"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/wind" />
 
                 <TextView
                     android:id="@+id/current_wind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="2.06 m/s" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -213,7 +206,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -233,15 +225,14 @@
                     android:id="@+id/image_cloud"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/cloud" />
 
                 <TextView
                     android:id="@+id/current_cloud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="0%" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -263,15 +254,14 @@
                     android:id="@+id/image_ultra_violet"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/ultra_violet" />
 
                 <TextView
                     android:id="@+id/current_ultra_violet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="0.0" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -293,15 +283,14 @@
                     android:id="@+id/image_visibility"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/vision" />
 
                 <TextView
                     android:id="@+id/current_visibility"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="600 ms" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"

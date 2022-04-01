@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast.ui.view
+package com.abdelrhmanhsh.weatherforecast.ui.view.home
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,31 +8,30 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
-import com.abdelrhmanhsh.weatherforecast.model.response.Daily
 import com.abdelrhmanhsh.weatherforecast.model.response.Hourly
+import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import java.text.SimpleDateFormat
 
 class HourlyAdapter(
-    private val context: Context,
     private var hourlyList: List<Hourly>
 ): RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.hourly_weather_list_item, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: HourlyAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-//        Glide.with(context)
-//            .load(dailyList[position].image)
-//            .apply(
-//                RequestOptions()
-//                .placeholder(R.drawable.ic_launcher_background)
-//                .error(R.drawable.ic_launcher_background))
-//            .into(holder.image)
+        holder.icon.load(hourlyList[position].weather[0].icon)
 
-        holder.temperature.text = hourlyList[position].temp.toString()
-//        holder.time.text = hourlyList[position].temp.toString()
+        val simpleDateFormat = SimpleDateFormat("hh a")
+        val dateString = simpleDateFormat.format(hourlyList[position].dt*1000L)
+        holder.time.text = String.format(dateString)
+
+        holder.temperature.text = "${hourlyList[position].temp}\u00B0"
     }
 
     fun setList(hourlyList: List<Hourly>){

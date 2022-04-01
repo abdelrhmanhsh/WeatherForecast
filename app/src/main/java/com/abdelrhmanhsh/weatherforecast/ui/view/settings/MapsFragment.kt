@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast.ui.view
+package com.abdelrhmanhsh.weatherforecast.ui.view.settings
 
 import android.location.Address
 import android.location.Geocoder
@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
@@ -39,7 +41,7 @@ class MapsFragment : Fragment() {
 
             val myLocation = LatLng(latitude, longitude)
             googleMap.addMarker(MarkerOptions().position(myLocation))
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 5F))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 10F))
         }
 
         googleMap.setOnMapClickListener {
@@ -60,10 +62,36 @@ class MapsFragment : Fragment() {
                 Log.e(TAG, "error: ${e.message}")
             }
 
+            val builder = AlertDialog.Builder(context!!)
+
             val loc = LatLng(it.latitude, it.longitude)
             googleMap.addMarker(MarkerOptions().position(loc).title(city))
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc))
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(10F))
+//            googleMap.apply {
+////                addMarker(MarkerOptions().position(loc).title(city))
+////                moveCamera(CameraUpdateFactory.newLatLng(loc))
+////                animateCamera(CameraUpdateFactory.zoomTo(10F))
+//            }
+
+            builder.apply {
+                setTitle(city)
+                setMessage(getString(R.string.add_this_location))
+                setPositiveButton(getString(R.string.save)) { dialog, which ->
+
+                    lifecycleScope.launch {
+                        userPreferences.storeMapLongLatPref(it.latitude, it.longitude)
+                        userPreferences.storeUserMapLocationPref("$city, $country")
+                    }
+
+                }
+                setNegativeButton(getString(R.string.cancel)) { dialog, which ->
+                    googleMap.clear()
+                }
+                show()
+            }
+
+
         }
     }
 

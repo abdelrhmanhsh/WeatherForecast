@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +12,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="ُFriday"
         android:textColor="@color/black" />
 
     <TextView
@@ -20,34 +20,32 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/day"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp"
-        android:text="Mostly sunny" />
+        android:layout_marginTop="8dp" />
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/daily_icon"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toStartOf="@+id/max_temp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="20dp"/>
 
     <TextView
         android:id="@+id/max_temp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="29o"
+        app:layout_constraintWidth_percent="0.2"
         android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/min_temp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/max_temp"
-        android:text="11o" />
+        app:layout_constraintTop_toBottomOf="@id/max_temp" />
 
     <View
         android:layout_width="match_parent"

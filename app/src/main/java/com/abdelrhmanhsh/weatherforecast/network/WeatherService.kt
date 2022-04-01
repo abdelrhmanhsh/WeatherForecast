@@ -15,6 +15,10 @@ interface WeatherService {
         lon: Double,
         @Query("exclude")
         exclude: String,
+        @Query("units")
+        units: String,
+        @Query("lang")
+        lang: String,
         @Query("appid")
         appid: String
     ): Response<WeatherResponse>

@@ -1,4 +1,4 @@
-package com.abdelrhmanhsh.weatherforecast.ui.view
+package com.abdelrhmanhsh.weatherforecast.ui.view.home
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,31 +9,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.model.response.Daily
+import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
+import java.text.SimpleDateFormat
 
 class DailyAdapter(
-    private val context: Context,
     private var dailyList: List<Daily>
     ): RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.daily_weather_list_item, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: DailyAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-//        Glide.with(context)
-//            .load(dailyList[position].image)
-//            .apply(
-//                RequestOptions()
-//                .placeholder(R.drawable.ic_launcher_background)
-//                .error(R.drawable.ic_launcher_background))
-//            .into(holder.image)
+        holder.icon.load(dailyList[position].weather[0].icon)
 
-//        holder.day.text = dailyList[position].title
+        val simpleDateFormat = SimpleDateFormat("EEEE dd/MM")
+        val dateString = simpleDateFormat.format(dailyList[position].dt*1000L)
+        holder.day.text = String.format(dateString)
+
         holder.description.text = dailyList[position].weather[0].description
-        holder.maxTemp.text = dailyList[position].temp.max.toString()
-        holder.minTemp.text = dailyList[position].temp.min.toString()
+        holder.maxTemp.text = "${dailyList[position].temp.max}\u00B0"
+        holder.minTemp.text = "${dailyList[position].temp.min}\u00B0"
     }
 
     fun setList(dailyList: List<Daily>){
@@ -53,7 +51,7 @@ class DailyAdapter(
             get() = itemView.findViewById(R.id.description)
 
         val icon: ImageView
-            get() = itemView.findViewById(R.id.icon)
+            get() = itemView.findViewById(R.id.daily_icon)
 
         val maxTemp: TextView
             get() = itemView.findViewById(R.id.max_temp)

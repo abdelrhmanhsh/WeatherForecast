@@ -39,11 +39,11 @@ class WeatherClient: RemoteSource {
 
     var weatherList = MutableLiveData<WeatherResponse>()
 
-    override fun getWeather(latitude: Double, longitude: Double, exclude: String, apiKey: String): LiveData<WeatherResponse> {
+    override fun getWeather(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<WeatherResponse> {
         val weatherService = getInstanceRetrofit().create(WeatherService::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val response = weatherService.getWeather(latitude, longitude, exclude, apiKey)
+            val response = weatherService.getWeather(latitude, longitude, "minutely", units, lang, apiKey)
             if (response.isSuccessful) {
                 weatherList.postValue(response.body())
                 println("ApiCalls response: ${response.body()}")
