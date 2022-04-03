@@ -24,6 +24,8 @@ class UserPreferences(val context: Context) {
         private val gpsLongitudePref = doublePreferencesKey(Constants.GPS_LONGITUDE_PREFERENCE_KEY)
         private val mapLatitudePref = doublePreferencesKey(Constants.MAP_LATITUDE_PREFERENCE_KEY)
         private val mapLongitudePref = doublePreferencesKey(Constants.MAP_LONGITUDE_PREFERENCE_KEY)
+        private val lastLatitudePref = doublePreferencesKey(Constants.LAST_LATITUDE_PREFERENCE_KEY)
+        private val lastLongitudePref = doublePreferencesKey(Constants.LAST_LONGITUDE_PREFERENCE_KEY)
         private val favLatitudePref = doublePreferencesKey(Constants.FAV_LATITUDE_PREFERENCE_KEY)
         private val favLongitudePref = doublePreferencesKey(Constants.FAV_LONGITUDE_PREFERENCE_KEY)
         private val isFavouritePref = booleanPreferencesKey(Constants.IS_FAVOURITE_PREFERENCE_KEY)
@@ -70,6 +72,13 @@ class UserPreferences(val context: Context) {
         dataStore.edit {
             it[favLatitudePref] = latitude
             it[favLongitudePref] = longitude
+        }
+    }
+
+    suspend fun storeLastLongLatPref(latitude: Double, longitude: Double){
+        dataStore.edit {
+            it[lastLatitudePref] = latitude
+            it[lastLongitudePref] = longitude
         }
     }
 
@@ -146,6 +155,16 @@ class UserPreferences(val context: Context) {
     suspend fun readFavLongitude(): Double?{
         val longitude = dataStore.data.first()
         return longitude[favLongitudePref]
+    }
+
+    suspend fun readLastLatitude(): Double?{
+        val latitude = dataStore.data.first()
+        return latitude[lastLatitudePref]
+    }
+
+    suspend fun readLastLongitude(): Double?{
+        val longitude = dataStore.data.first()
+        return longitude[lastLongitudePref]
     }
 
     suspend fun readIsFavourite(): Boolean?{

@@ -45,12 +45,32 @@
     <string name="add_this_location">Add this location</string>
     <string name="are_you_sure_delete1">Are you sure you want to delete</string>
     <string name="are_you_sure_delete2">from your favourites?</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete_alert_message">You are attempting to delete this alert</string>
+    <string name="provide_valid_date_alert">You must provide end date after start date for the alert!</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
     <!-- snackBars -->
     <string name="location_deleted">Location Deleted</string>
+    <string name="alert_deleted">Alert Deleted</string>
     <string name="undo">Undo</string>
+
+    <!-- more -->
+    <string name="jan">Jan</string>
+    <string name="feb">Feb</string>
+    <string name="mar">Mar</string>
+    <string name="apr">Apr</string>
+    <string name="may">May</string>
+    <string name="jun">Jun</string>
+    <string name="jul">Jul</string>
+    <string name="aug">Aug</string>
+    <string name="sep">Sep</string>
+    <string name="oct">Oct</string>
+    <string name="nov">Nov</string>
+    <string name="dec">Dec</string>
 
 </resources>

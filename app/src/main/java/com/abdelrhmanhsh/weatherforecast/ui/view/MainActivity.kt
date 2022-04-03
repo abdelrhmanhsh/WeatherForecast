@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             userPreferences.storeUserGPSLocationPref("$city, $country")
                             userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
+                            userPreferences.storeLastLongLatPref(location.result.latitude, location.result.longitude)
                             userPreferences.storeIsFavouritePref(false)
                         }
 

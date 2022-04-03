@@ -64,4 +64,16 @@ class Repository(
     override suspend fun deleteLocationFromFavourites(favouriteWeather: FavouriteWeather) {
         localSource.deleteLocationFromFavourites(favouriteWeather)
     }
+
+    override suspend fun addAlert(alert: Alert) {
+        localSource.addAlert(alert)
+    }
+
+    override fun getAlerts(): LiveData<List<Alert>> {
+        return localSource.getAlerts()
+    }
+
+    override suspend fun deleteAlert(alert: Alert) {
+        localSource.deleteAlert(alert)
+    }
 }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/main_app_background">
+
+    <TextView
+        android:id="@+id/text_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/from"
+        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:background="@drawable/radius_holo_blue_background"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        android:padding="15dp" />
+
+    <TextView
+        android:id="@+id/text_to"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/to"
+        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:background="@drawable/radius_holo_blue_background"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        android:padding="15dp" />
+
+    <LinearLayout
+        android:id="@+id/linear_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_item_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_from"
+        app:layout_constraintWidth_percent="0.4"
+        android:orientation="vertical"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:padding="15dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="26 Feb 2022"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2:52 AM"
+            android:textColor="@color/secondary_text"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_to"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_item_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_from"
+        app:layout_constraintWidth_percent="0.4"
+        android:orientation="vertical"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+        android:padding="15dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="28 Feb 2022"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5:52 AM"
+            android:textColor="@color/secondary_text"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save_alert"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linear_from"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.9"
+        android:background="@drawable/radius_holo_blue_background"
+        android:text="@string/save"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

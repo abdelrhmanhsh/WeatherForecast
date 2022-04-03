@@ -13,8 +13,13 @@ interface RepositoryInterface {
     // room
     suspend fun insertWeather(weatherResponse: WeatherResponse)
     fun getWeatherFromLocation(location: String): LiveData<WeatherResponse>
+
     suspend fun addWeatherToFavourites(favouriteWeather: FavouriteWeather)
     fun getFavourites(): LiveData<List<FavouriteWeather>>
     suspend fun deleteLocationFromFavourites(favouriteWeather: FavouriteWeather)
+
+    suspend fun addAlert(alert: Alert)
+    fun getAlerts(): LiveData<List<Alert>>
+    suspend fun deleteAlert(alert: Alert)
 
 }

@@ -2,6 +2,7 @@ package com.abdelrhmanhsh.weatherforecast.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.abdelrhmanhsh.weatherforecast.model.Alert
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 
@@ -21,6 +22,15 @@ interface WeatherDao {
     fun getFavourites(): LiveData<List<FavouriteWeather>>
 
     @Delete
-    suspend fun deleteLocationFromFavourites(favouriteWeather: FavouriteWeather) // or pass location and query
+    suspend fun deleteLocationFromFavourites(favouriteWeather: FavouriteWeather)
+
+    @Insert
+    suspend fun addAlert(alert: Alert)
+
+    @Query("Select * From alert")
+    fun getAlerts(): LiveData<List<Alert>>
+
+    @Delete
+    suspend fun deleteAlert(alert: Alert)
 
 }

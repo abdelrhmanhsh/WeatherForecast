@@ -19,6 +19,8 @@ class Constants {
         const val MAP_LONGITUDE_PREFERENCE_KEY = "map_longitude_key"
         const val FAV_LATITUDE_PREFERENCE_KEY = "fav_latitude_key"
         const val FAV_LONGITUDE_PREFERENCE_KEY = "fav_longitude_key"
+        const val LAST_LATITUDE_PREFERENCE_KEY = "last_latitude_key"
+        const val LAST_LONGITUDE_PREFERENCE_KEY = "last_longitude_key"
         const val IS_FAVOURITE_PREFERENCE_KEY = "is_favourite_key"
         const val LOCATION_PREFERENCE_KEY = "location_key"
         const val LANGUAGE_PREFERENCE_KEY = "language_key"

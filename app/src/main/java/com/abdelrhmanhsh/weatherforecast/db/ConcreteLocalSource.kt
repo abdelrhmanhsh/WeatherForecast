@@ -2,6 +2,7 @@ package com.abdelrhmanhsh.weatherforecast.db
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.abdelrhmanhsh.weatherforecast.model.Alert
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 
@@ -32,6 +33,18 @@ class ConcreteLocalSource(val context: Context): LocalSource {
 
     override suspend fun deleteLocationFromFavourites(favouriteWeather: FavouriteWeather) {
         dao.deleteLocationFromFavourites(favouriteWeather)
+    }
+
+    override suspend fun addAlert(alert: Alert) {
+        dao.addAlert(alert)
+    }
+
+    override fun getAlerts(): LiveData<List<Alert>> {
+        return dao.getAlerts()
+    }
+
+    override suspend fun deleteAlert(alert: Alert) {
+        dao.deleteAlert(alert)
     }
 
 }

@@ -96,6 +96,7 @@ class FavouritesFragment : Fragment(), View.OnClickListener {
         lifecycleScope.launch {
             userPreferences.storeUserFavLocationPref(favouriteWeather.location)
             userPreferences.storeFavLongLatPref(favouriteWeather.lat, favouriteWeather.lon)
+            userPreferences.storeLastLongLatPref(favouriteWeather.lat, favouriteWeather.lon)
             userPreferences.storeIsFavouritePref(true)
 
             println("fav weather: location: ${favouriteWeather.location}")

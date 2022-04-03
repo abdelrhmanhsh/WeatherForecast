@@ -162,6 +162,7 @@ class MapsFragment : Fragment() {
 
                 lifecycleScope.launch {
                     userPreferences.storeMapLongLatPref(latitude, longitude)
+                    userPreferences.storeLastLongLatPref(latitude, longitude)
                     userPreferences.storeUserMapLocationPref("$city, $country")
                     userPreferences.storeIsFavouritePref(false)
                 }
