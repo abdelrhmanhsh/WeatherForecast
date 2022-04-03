@@ -1,20 +1,17 @@
-package com.abdelrhmanhsh.weatherforecast.model
+package com.abdelrhmanhsh.weatherforecast.db
 
 import androidx.lifecycle.LiveData
+import androidx.room.Delete
+import androidx.room.Query
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 
-interface RepositoryInterface {
+interface LocalSource {
 
-    // network
-    fun getWeather(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<WeatherResponse>
-    fun getWeatherFavourite(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<FavouriteWeather>
-
-    // room
     suspend fun insertWeather(weatherResponse: WeatherResponse)
     fun getWeatherFromLocation(location: String): LiveData<WeatherResponse>
-    suspend fun addWeatherToFavourites(favouriteWeather: FavouriteWeather)
     fun getFavourites(): LiveData<List<FavouriteWeather>>
+    suspend fun addWeatherToFavourite(favouriteWeather: FavouriteWeather)
     suspend fun deleteLocationFromFavourites(favouriteWeather: FavouriteWeather)
 
 }

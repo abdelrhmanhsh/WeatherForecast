@@ -39,9 +39,18 @@
     <string name="m_per_h">m/h</string>
     <string name="m">m</string>
 
-    <!-- dialog -->
+    <!-- favourite fragment -->
+
+    <!-- dialogs -->
     <string name="add_this_location">Add this location</string>
+    <string name="are_you_sure_delete1">Are you sure you want to delete</string>
+    <string name="are_you_sure_delete2">from your favourites?</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+
+    <!-- snackBars -->
+    <string name="location_deleted">Location Deleted</string>
+    <string name="undo">Undo</string>
 
 </resources>

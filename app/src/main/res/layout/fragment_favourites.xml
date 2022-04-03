@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.favourites.FavouritesFragment">
+    tools:context=".ui.view.favourites.FavouritesFragment"
+    android:background="@color/main_app_background">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favourite_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Favourties Fragment"
-        android:gravity="center" />
+        android:layout_margin="15dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_add_favourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_add"/>
 
 </FrameLayout>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.view.home.HomeFragment"
-    android:background="#474646">
+    android:background="@color/main_app_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,23 +33,23 @@
             android:padding="6dp"
             android:layout_marginStart="6dp"/>
 
-        <TextView
-            android:id="@+id/current_weather_highest_lowest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/current_date"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:text="Day 29 Night 11"
-            android:padding="6dp"
-            android:layout_marginStart="6dp" />
+<!--        <TextView-->
+<!--            android:id="@+id/current_weather_highest_lowest"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/current_date"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:text="Day 29 Night 11"-->
+<!--            android:padding="6dp"-->
+<!--            android:layout_marginStart="6dp" />-->
 
         <TextView
             android:id="@+id/current_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/current_weather_highest_lowest"
+            app:layout_constraintTop_toBottomOf="@id/current_date"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="52sp"
             android:textColor="@color/white"
@@ -76,7 +76,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.2"
             app:layout_constraintHeight_percent="0.1"
-            android:layout_marginTop="18dp"
             android:layout_marginEnd="18dp"/>
 
         <TextView
@@ -87,8 +86,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="20sp"
             android:textColor="@color/white"
-            android:padding="12dp" />
-
+            android:layout_marginEnd="24dp"/>
 
         <!-- hourly weather -->
         <androidx.recyclerview.widget.RecyclerView
@@ -96,8 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/feels_like"
-            android:layout_marginTop="10dp"/>
+            app:layout_constraintTop_toBottomOf="@id/current_weather_desc"
+            android:layout_margin="15dp"/>
 
         <!-- daily weather -->
         <androidx.recyclerview.widget.RecyclerView
@@ -106,8 +104,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/hourly_recycler_view"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_margin="15dp"/>
 
         <!-- more info -->
         <LinearLayout
@@ -116,7 +113,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/daily_recycler_view"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:layout_marginTop="15dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -136,7 +134,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -165,7 +164,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -194,7 +194,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -232,7 +233,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -261,7 +263,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -290,7 +293,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary_text" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -302,7 +306,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

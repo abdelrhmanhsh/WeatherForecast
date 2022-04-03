@@ -1,6 +1,7 @@
 package com.abdelrhmanhsh.weatherforecast.util
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -18,10 +19,14 @@ class UserPreferences(val context: Context) {
     companion object {
         private val userGPSLocationPref = stringPreferencesKey(Constants.USER_GPS_LOCATION_KEY)
         private val userMapLocationPref = stringPreferencesKey(Constants.USER_MAP_LOCATION_KEY)
+        private val userFavouriteLocationPref = stringPreferencesKey(Constants.USER_FAV_LOCATION_KEY)
         private val gpsLatitudePref = doublePreferencesKey(Constants.GPS_LATITUDE_PREFERENCE_KEY)
         private val gpsLongitudePref = doublePreferencesKey(Constants.GPS_LONGITUDE_PREFERENCE_KEY)
         private val mapLatitudePref = doublePreferencesKey(Constants.MAP_LATITUDE_PREFERENCE_KEY)
         private val mapLongitudePref = doublePreferencesKey(Constants.MAP_LONGITUDE_PREFERENCE_KEY)
+        private val favLatitudePref = doublePreferencesKey(Constants.FAV_LATITUDE_PREFERENCE_KEY)
+        private val favLongitudePref = doublePreferencesKey(Constants.FAV_LONGITUDE_PREFERENCE_KEY)
+        private val isFavouritePref = booleanPreferencesKey(Constants.IS_FAVOURITE_PREFERENCE_KEY)
 
         private val locationPref = stringPreferencesKey(Constants.LOCATION_PREFERENCE_KEY)
         private val languagePref = stringPreferencesKey(Constants.LANGUAGE_PREFERENCE_KEY)
@@ -41,6 +46,12 @@ class UserPreferences(val context: Context) {
         }
     }
 
+    suspend fun storeUserFavLocationPref(location: String){
+        dataStore.edit {
+            it[userFavouriteLocationPref] = location
+        }
+    }
+
     suspend fun storeGPSLongLatPref(latitude: Double, longitude: Double){
         dataStore.edit {
             it[gpsLatitudePref] = latitude
@@ -52,6 +63,19 @@ class UserPreferences(val context: Context) {
         dataStore.edit {
             it[mapLatitudePref] = latitude
             it[mapLongitudePref] = longitude
+        }
+    }
+
+    suspend fun storeFavLongLatPref(latitude: Double, longitude: Double){
+        dataStore.edit {
+            it[favLatitudePref] = latitude
+            it[favLongitudePref] = longitude
+        }
+    }
+
+    suspend fun storeIsFavouritePref(isFavourite: Boolean){
+        dataStore.edit {
+            it[isFavouritePref] = isFavourite
         }
     }
 
@@ -89,6 +113,11 @@ class UserPreferences(val context: Context) {
         return location[userMapLocationPref]
     }
 
+    suspend fun readUserFavLocation(): String?{
+        val location = dataStore.data.first()
+        return location[userFavouriteLocationPref]
+    }
+
     suspend fun readGPSLatitude(): Double?{
         val latitude = dataStore.data.first()
         return latitude[gpsLatitudePref]
@@ -107,6 +136,21 @@ class UserPreferences(val context: Context) {
     suspend fun readMapLongitude(): Double?{
         val longitude = dataStore.data.first()
         return longitude[mapLongitudePref]
+    }
+
+    suspend fun readFavLatitude(): Double?{
+        val latitude = dataStore.data.first()
+        return latitude[favLatitudePref]
+    }
+
+    suspend fun readFavLongitude(): Double?{
+        val longitude = dataStore.data.first()
+        return longitude[favLongitudePref]
+    }
+
+    suspend fun readIsFavourite(): Boolean?{
+        val windSpeed = dataStore.data.first()
+        return windSpeed[isFavouritePref]
     }
 
     suspend fun readLocation(): String?{

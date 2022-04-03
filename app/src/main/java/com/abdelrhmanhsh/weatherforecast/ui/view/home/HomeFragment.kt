@@ -6,21 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentHomeBinding
+import com.abdelrhmanhsh.weatherforecast.db.ConcreteLocalSource
 import com.abdelrhmanhsh.weatherforecast.model.Repository
+import com.abdelrhmanhsh.weatherforecast.model.response.DailyList
+import com.abdelrhmanhsh.weatherforecast.model.response.HourlyList
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import com.abdelrhmanhsh.weatherforecast.network.WeatherClient
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.home.HomeViewModel
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.home.HomeViewModelFactory
-import com.abdelrhmanhsh.weatherforecast.util.Constants
+import com.abdelrhmanhsh.weatherforecast.util.*
+import com.abdelrhmanhsh.weatherforecast.util.AppHelper.Companion.isInternetAvailable
 import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
 import com.abdelrhmanhsh.weatherforecast.util.PrivateConstants.Companion.API_KEY
-import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
@@ -51,7 +55,8 @@ class HomeFragment : Fragment() {
         viewModelFactory = HomeViewModelFactory(
             Repository.getInstance(
                 context!!,
-                WeatherClient.getInstance()!!
+                WeatherClient.getInstance()!!,
+                ConcreteLocalSource(context!!)
             )!!
         )
 
@@ -66,25 +71,33 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
 
-            var userLocation: String = userPreferences.readUserGPSLocation().toString()
-            var latitude: Double = userPreferences.readGPSLatitude()!!
-            var longitude: Double = userPreferences.readGPSLatitude()!!
             val temperature: String = userPreferences.readTemperature()?: getString(R.string.celsius)
             var language: String = userPreferences.readLanguage()?: "en"
 
-            if(userPreferences.readLocation() == getString(R.string.map)){
+            var userLocation: String = userPreferences.readUserGPSLocation().toString()
+            var latitude: Double = userPreferences.readGPSLatitude()!! // TODO Crash here in first time
+            var longitude: Double = userPreferences.readGPSLongitude()!!
 
-                userLocation = userPreferences.readUserMapLocation().toString()
-                latitude = userPreferences.readMapLatitude()!!
-                longitude = userPreferences.readMapLatitude()!!
-
+            if (userPreferences.readIsFavourite() == true){
+                userLocation = userPreferences.readUserFavLocation().toString()
+                latitude = userPreferences.readFavLatitude()!!
+                longitude = userPreferences.readFavLongitude()!!
+            } else {
+                if(userPreferences.readLocation() == getString(R.string.map)){
+                    userLocation = userPreferences.readUserMapLocation().toString()
+                    latitude = userPreferences.readMapLatitude()!! // TODO crashes if user doesn't select any location from map
+                    longitude = userPreferences.readMapLongitude()!!
+                }
             }
+
+            println("getWeather PREFS: isFav? ${userPreferences.readIsFavourite()} location: ${userPreferences.readLocation()}")
+            println("getWeather PREFS Strings: location: $userLocation}")
+            println("getWeather PREFS Strings: lat: $latitude long $longitude")
 
             if(userPreferences.readLanguage() == getString(R.string.arabic)){
                 language = "ar"
             }
 
-//            val units: String
             val units = when(temperature){
                 getString(R.string.celsius) -> getString(R.string.metric)
                 getString(R.string.fahrenheit) -> getString(R.string.imperial)
@@ -93,14 +106,42 @@ class HomeFragment : Fragment() {
 
             binding.location.text = userLocation
 
-            viewModel.getWeather(latitude, longitude, units, language, API_KEY).observe(this@HomeFragment){ weather ->
-//                Log.i(TAG, "onCreate: movies: $weather")
-                if (weather != null){
-                    dailyAdapter.setList(weather.daily)
-                    hourlyAdapter.setList(weather.hourly)
-                    dailyAdapter.notifyDataSetChanged()
-                    hourlyAdapter.notifyDataSetChanged()
-                    updateUI(weather, units)
+            if(isInternetAvailable(context!!)) {
+                viewModel.getWeather(latitude, longitude, units, language, API_KEY).observe(this@HomeFragment){ weather ->
+
+                    if (weather != null){
+                        dailyAdapter.setList(weather.daily)
+                        hourlyAdapter.setList(weather.hourly)
+                        dailyAdapter.notifyDataSetChanged()
+                        hourlyAdapter.notifyDataSetChanged()
+                        updateUI(weather, units)
+
+                        val saveWeather = WeatherResponse(
+                            location = userLocation,
+                            current = weather.current,
+                            daily = weather.daily,
+                            hourly = weather.hourly,
+                            lat = weather.lat,
+                            lon = weather.lon,
+                            timezone = weather.timezone,
+                            timezone_offset = weather.timezone_offset
+                        )
+                        println("saveWeather: location: ${saveWeather.location}")
+                        println("saveWeather: lat: ${saveWeather.lat} long: ${saveWeather.lon}")
+                        viewModel.insertWeather(saveWeather)
+                    }
+                }
+                Toast.makeText(context, "Internet", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Offline", Toast.LENGTH_SHORT).show()
+                viewModel.getWeatherFromLocation(userLocation).observe(this@HomeFragment) { weather ->
+                    if(weather != null){
+                        dailyAdapter.setList(weather.daily)
+                        hourlyAdapter.setList(weather.hourly)
+                        dailyAdapter.notifyDataSetChanged()
+                        hourlyAdapter.notifyDataSetChanged()
+                        updateUI(weather, units)
+                    }
                 }
             }
         }
@@ -110,15 +151,16 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
 
-            val userLocation: String
+            var userLocation: String = userPreferences.readUserGPSLocation().toString()
 
-            if(userPreferences.readLocation().isNullOrEmpty() || userPreferences.readLocation() == getString(R.string.gps)){
-                userLocation = userPreferences.readUserGPSLocation().toString()
-                println("USER CURRENT LOCATION GPS ${userPreferences.readUserGPSLocation().toString()}")
+            if (userPreferences.readIsFavourite() == true){
+                userLocation = userPreferences.readUserFavLocation().toString()
             } else {
-                userLocation = userPreferences.readUserMapLocation().toString()
-                println("USER CURRENT LOCATION MAP ${userPreferences.readUserMapLocation().toString()}")
+                if(userPreferences.readLocation() == getString(R.string.map)){
+                    userLocation = userPreferences.readUserMapLocation().toString()
+                }
             }
+
             binding.location.text = userLocation
 
         }
@@ -131,9 +173,9 @@ class HomeFragment : Fragment() {
 
 
         val currentWeather = when(units){
-            getString(R.string.metric) -> weatherResponse.current.temp.toString() + "\u2103"
-            getString(R.string.imperial) -> weatherResponse.current.temp.toString() + "\u2109"
-            else -> weatherResponse.current.temp.toString() + "\u212A"
+            getString(R.string.metric) -> weatherResponse.current.temp.toInt().toString() + "\u2103"
+            getString(R.string.imperial) -> weatherResponse.current.temp.toInt().toString() + "\u2109"
+            else -> weatherResponse.current.temp.toInt().toString() + "\u212A"
         }
 
         binding.currentWeather.text = currentWeather
@@ -151,12 +193,18 @@ class HomeFragment : Fragment() {
 
     private fun initRecyclerViews(){
         // daily
+        val dailyList = DailyList(ArrayList())
+        val hourlyList = HourlyList(ArrayList())
         layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = RecyclerView.VERTICAL
         dailyAdapter = DailyAdapter(ArrayList())
 
         binding.dailyRecyclerView.adapter = dailyAdapter
         binding.dailyRecyclerView.layoutManager = layoutManager
+
+        val topSpacingItemDecoration = TopSpacingItemDecoration(30)
+        binding.dailyRecyclerView.removeItemDecoration(topSpacingItemDecoration)
+        binding.dailyRecyclerView.addItemDecoration(topSpacingItemDecoration)
 
         // hourly
         layoutManager = LinearLayoutManager(context)
@@ -165,6 +213,10 @@ class HomeFragment : Fragment() {
 
         binding.hourlyRecyclerView.adapter = hourlyAdapter
         binding.hourlyRecyclerView.layoutManager = layoutManager
+
+        val verticalSpacingItemDecoration = VerticalSpacingItemDecoration(10)
+        binding.hourlyRecyclerView.removeItemDecoration(verticalSpacingItemDecoration)
+        binding.hourlyRecyclerView.addItemDecoration(verticalSpacingItemDecoration)
     }
 
 }

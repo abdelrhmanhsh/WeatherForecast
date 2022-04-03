@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.model.response.Hourly
+import com.abdelrhmanhsh.weatherforecast.model.response.HourlyList
 import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -31,7 +32,7 @@ class HourlyAdapter(
         val dateString = simpleDateFormat.format(hourlyList[position].dt*1000L)
         holder.time.text = String.format(dateString)
 
-        holder.temperature.text = "${hourlyList[position].temp}\u00B0"
+        holder.temperature.text = "${hourlyList[position].temp.toInt()}\u00B0"
     }
 
     fun setList(hourlyList: List<Hourly>){

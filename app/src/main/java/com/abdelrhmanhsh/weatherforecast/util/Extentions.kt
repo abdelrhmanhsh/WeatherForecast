@@ -4,6 +4,8 @@ import android.widget.ImageView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class Extensions {
 
@@ -19,6 +21,9 @@ class Extensions {
                 )
                 .into(this)
         }
+
+        inline fun <reified T> Gson.fromJson(json: String) =
+            fromJson<T>(json, object : TypeToken<T>() {}.type)
 
     }
 

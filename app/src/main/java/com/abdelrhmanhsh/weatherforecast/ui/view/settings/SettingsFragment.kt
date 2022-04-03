@@ -9,6 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentSettingsBinding
+import com.abdelrhmanhsh.weatherforecast.ui.view.favourites.FavouritesFragmentDirections
+import com.abdelrhmanhsh.weatherforecast.util.Constants
 import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
 import kotlinx.coroutines.launch
 
@@ -87,10 +89,12 @@ class SettingsFragment : Fragment(), View.OnClickListener{
     private fun selectionLocation(selection: String, view: View){
         lifecycleScope.launch {
             userPreferences.storeLocationPref(selection)
+            userPreferences.storeIsFavouritePref(false)
         }
         if(selection == getString(R.string.map)){
-            val action =
-                SettingsFragmentDirections.actionSettingsFragmentToMapsFragment()
+            val action: SettingsFragmentDirections.ActionSettingsToMaps
+                    = SettingsFragmentDirections.actionSettingsToMaps()
+            action.flag = Constants.MAPS_FROM_SETTINGS
             Navigation.findNavController(view).navigate(action)
         }
     }

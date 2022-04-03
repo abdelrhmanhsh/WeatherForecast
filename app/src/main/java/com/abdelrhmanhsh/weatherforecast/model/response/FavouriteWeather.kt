@@ -3,8 +3,8 @@ package com.abdelrhmanhsh.weatherforecast.model.response
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "weather")
-data class WeatherResponse(
+@Entity(tableName = "favourite_weather")
+data class FavouriteWeather(
     @PrimaryKey
     val location: String,
     val current: Current,

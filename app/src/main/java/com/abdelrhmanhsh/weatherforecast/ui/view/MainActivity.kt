@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
                     if(location.result == null){
                         requestNewLocation()
                     } else {
-                        Toast.makeText(this, "Latitude: ${location.result.latitude} Longitude ${location.result.longitude}",
-                        Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this, "Latitude: ${location.result.latitude} Longitude ${location.result.longitude}",
+//                        Toast.LENGTH_SHORT).show()
 
                         val geocoder = Geocoder(this, Locale.getDefault())
                         val addresses: List<Address> = geocoder.getFromLocation(location.result.latitude, location.result.longitude, 1)
@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             userPreferences.storeUserGPSLocationPref("$city, $country")
                             userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
+                            userPreferences.storeIsFavouritePref(false)
                         }
 
                         Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
@@ -144,8 +145,8 @@ class MainActivity : AppCompatActivity() {
     private val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val location = locationResult.lastLocation
-            Toast.makeText(this@MainActivity, "Latitude: ${location.latitude} Longitude ${location.longitude}",
-                Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity, "Latitude: ${location.latitude} Longitude ${location.longitude}",
+//                Toast.LENGTH_SHORT).show()
         }
     }
 
