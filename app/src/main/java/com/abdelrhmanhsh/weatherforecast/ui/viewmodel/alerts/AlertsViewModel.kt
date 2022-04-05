@@ -5,9 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abdelrhmanhsh.weatherforecast.model.Alert
 import com.abdelrhmanhsh.weatherforecast.model.RepositoryInterface
+import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import kotlinx.coroutines.launch
 
 class AlertsViewModel(private val repositoryInterface: RepositoryInterface): ViewModel() {
+
+    fun getWeather(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<WeatherResponse> {
+        return repositoryInterface.getWeather(latitude, longitude, units, lang, apiKey)
+    }
 
     fun addAlert(alert: Alert){
         viewModelScope.launch {

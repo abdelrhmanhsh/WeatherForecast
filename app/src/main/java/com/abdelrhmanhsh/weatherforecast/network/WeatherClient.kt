@@ -2,6 +2,7 @@ package com.abdelrhmanhsh.weatherforecast.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.abdelrhmanhsh.weatherforecast.model.response.AlertChecker
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.BASE_URL
@@ -40,6 +41,7 @@ class WeatherClient: RemoteSource {
 
     var weather = MutableLiveData<WeatherResponse>()
     var favouriteWeather = MutableLiveData<FavouriteWeather>()
+    lateinit var alertWeather: AlertChecker
 
     override fun getWeather(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): LiveData<WeatherResponse> {
         val weatherService = getInstanceRetrofit().create(WeatherService::class.java)
@@ -75,6 +77,18 @@ class WeatherClient: RemoteSource {
             }
         }
         return favouriteWeather
+    }
+
+    override suspend fun getAlerts(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String): AlertChecker {
+        val weatherService = getInstanceRetrofit().create(WeatherService::class.java)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = weatherService.getAlerts(latitude, longitude, "minutely", units, lang, apiKey)
+            if (response.isSuccessful) {
+                alertWeather = response.body()!!
+            }
+        }
+        return alertWeather
     }
 
 }

@@ -59,6 +59,7 @@ dependencies {
     def lifecycle_version = "2.4.1"
     def location_version = "19.0.1"
     def datastore_version = "1.0.0"
+    def work_version = "2.7.1"
 
     // nav graph
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -98,5 +99,8 @@ dependencies {
 
     // preferences dataStore
     implementation "androidx.datastore:datastore-preferences:$datastore_version"
+
+    // coroutine worker
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
 }

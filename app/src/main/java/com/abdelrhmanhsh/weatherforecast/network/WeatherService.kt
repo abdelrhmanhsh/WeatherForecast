@@ -1,5 +1,6 @@
 package com.abdelrhmanhsh.weatherforecast.network
 
+import com.abdelrhmanhsh.weatherforecast.model.response.AlertChecker
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import retrofit2.Response
@@ -39,5 +40,21 @@ interface WeatherService {
         @Query("appid")
         appid: String
     ): Response<FavouriteWeather>
+
+    @GET("data/2.5/onecall")
+    suspend fun getAlerts(
+        @Query("lat")
+        lat: Double,
+        @Query("lon")
+        lon: Double,
+        @Query("exclude")
+        exclude: String,
+        @Query("units")
+        units: String,
+        @Query("lang")
+        lang: String,
+        @Query("appid")
+        appid: String
+    ): Response<AlertChecker>
 
 }

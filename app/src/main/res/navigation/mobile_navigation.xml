@@ -8,13 +8,13 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.view.home.HomeFragment"
-        android:label="fragment_home"
+        android:label="@string/fragment_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/favouritesFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.view.favourites.FavouritesFragment"
-        android:label="fragment_favourites"
+        android:label="@string/fragment_favourites"
         tools:layout="@layout/fragment_favourites" >
 
         <action
@@ -38,13 +38,13 @@
     <fragment
         android:id="@+id/alertsFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.view.alerts.AlertsFragment"
-        android:label="fragment_alerts"
+        android:label="@string/fragment_alerts"
         tools:layout="@layout/fragment_alerts" />
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.view.settings.SettingsFragment"
-        android:label="fragment_settings"
+        android:label="@string/fragment_settings"
         tools:layout="@layout/fragment_settings" >
 
         <action
@@ -60,7 +60,7 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.abdelrhmanhsh.weatherforecast.ui.view.MapsFragment"
-        android:label="fragment_maps"
+        android:label="@string/fragment_maps"
         tools:layout="@layout/fragment_maps">
 
         <argument

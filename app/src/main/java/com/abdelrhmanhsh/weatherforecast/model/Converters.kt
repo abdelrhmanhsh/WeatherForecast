@@ -60,4 +60,18 @@ class Converters {
         }
     }
 
+    @TypeConverter
+    fun fromAlertList(alertList: List<AlertResponse>): String {
+        return Gson().toJson(alertList)
+    }
+
+    @TypeConverter
+    fun toAlertList(alertList: String): List<AlertResponse>{
+        return try {
+            Gson().fromJson<List<AlertResponse>>(alertList)
+        } catch (e: Exception){
+            arrayListOf()
+        }
+    }
+
 }

@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -17,10 +16,7 @@ import com.abdelrhmanhsh.weatherforecast.databinding.FragmentFavouritesBinding
 import com.abdelrhmanhsh.weatherforecast.db.ConcreteLocalSource
 import com.abdelrhmanhsh.weatherforecast.model.Repository
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
-import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import com.abdelrhmanhsh.weatherforecast.network.WeatherClient
-import com.abdelrhmanhsh.weatherforecast.ui.view.MapsFragmentDirections
-import com.abdelrhmanhsh.weatherforecast.ui.view.settings.SettingsFragmentDirections
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.favourites.FavouritesViewModel
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.favourites.FavouritesViewModelFactory
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.MAPS_FROM_FAVOURITES

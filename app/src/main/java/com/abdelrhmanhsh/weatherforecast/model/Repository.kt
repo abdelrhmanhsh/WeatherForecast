@@ -3,6 +3,7 @@ package com.abdelrhmanhsh.weatherforecast.model
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.abdelrhmanhsh.weatherforecast.db.LocalSource
+import com.abdelrhmanhsh.weatherforecast.model.response.AlertChecker
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import com.abdelrhmanhsh.weatherforecast.network.RemoteSource
@@ -43,6 +44,16 @@ class Repository(
         apiKey: String
     ): LiveData<FavouriteWeather> {
         return remoteSource.getWeatherFavourite(latitude, longitude, units, lang, apiKey)
+    }
+
+    override suspend fun getAlerts(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        lang: String,
+        apiKey: String
+    ): AlertChecker {
+        return remoteSource.getAlerts(latitude, longitude, units, lang, apiKey)
     }
 
     override suspend fun insertWeather(weatherResponse: WeatherResponse) {

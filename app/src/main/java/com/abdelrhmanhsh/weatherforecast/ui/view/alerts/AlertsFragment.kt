@@ -2,7 +2,9 @@ package com.abdelrhmanhsh.weatherforecast.ui.view.alerts
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.Notification
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,10 +13,16 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.AddAlertDialogBinding
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentAlertsBinding
@@ -24,21 +32,20 @@ import com.abdelrhmanhsh.weatherforecast.model.Repository
 import com.abdelrhmanhsh.weatherforecast.network.WeatherClient
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.alerts.AlertsViewModel
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.alerts.AlertsViewModelFactory
-import com.abdelrhmanhsh.weatherforecast.util.AppHelper
+import com.abdelrhmanhsh.weatherforecast.util.*
 import com.abdelrhmanhsh.weatherforecast.util.AppHelper.Companion.getEquivalentMonth
-import com.abdelrhmanhsh.weatherforecast.util.TopSpacingItemDecoration
-import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 class AlertsFragment : Fragment(), View.OnClickListener {
 
-    val START_DATE = 1
-    val END_DATE = 2
+    private val START_DATE = 1
+    private val END_DATE = 2
 
     private lateinit var binding: FragmentAlertsBinding
     private lateinit var dialogBinding: AddAlertDialogBinding
@@ -47,6 +54,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
     private lateinit var adapter: AlertsAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var userPreferences: UserPreferences
+    lateinit var notificationManagerCompat: NotificationManagerCompat
 
     private var startMillisAlert: Long = 0
     private var endMillisAlert: Long = 0
@@ -67,13 +75,13 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.floatingAddAlert.setOnClickListener(this)
-        userPreferences = UserPreferences(context!!)
+        userPreferences = UserPreferences(requireContext())
 
         viewModelFactory = AlertsViewModelFactory(
             Repository.getInstance(
-                context!!,
+                requireContext(),
                 WeatherClient.getInstance()!!,
-                ConcreteLocalSource(context!!)
+                ConcreteLocalSource(requireContext())
             )!!
         )
 
@@ -107,7 +115,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun deleteAlert(alert: Alert){
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         builder.apply {
             setTitle(getString(R.string.are_you_sure))
             setMessage(getString(R.string.delete_alert_message))
@@ -128,17 +136,12 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
     private fun showAddAlertDialog(){
 
-        val dialog = Dialog(context!!)
-//        dialog.setContentView(R.layout.add_alert_dialog)
-
+        val dialog = Dialog(requireContext())
         dialogBinding = AddAlertDialogBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
-        startMillisAlert = System.currentTimeMillis()
+        startMillisAlert = System.currentTimeMillis() + 120_000 // set start time to two minutes later from now
         endMillisAlert = System.currentTimeMillis() + 86_400_000 // set end date to one day later from today
-
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//        String dateString = formatter.format(new Date(dateInMillis)));
 
         val dateFormatter = SimpleDateFormat("dd MMM yyyy")
         startDateAlert = dateFormatter.format(Date(startMillisAlert))
@@ -171,7 +174,16 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
         dialogBinding.btnSaveAlert.setOnClickListener {
 
-            if(startMillisAlert < endMillisAlert){
+            if(startMillisAlert <= System.currentTimeMillis()) {
+
+                Toast.makeText(context, getString(R.string.provide_time_in_future_alert), Toast.LENGTH_SHORT).show()
+
+            } else if(startMillisAlert > endMillisAlert){
+
+                Toast.makeText(context, getString(R.string.provide_valid_date_alert), Toast.LENGTH_SHORT).show()
+
+            } else {
+
                 saveAlert(
                     Alert(
                         id = 0,
@@ -186,10 +198,8 @@ class AlertsFragment : Fragment(), View.OnClickListener {
                     )
                 )
                 dialog.dismiss()
-            } else {
-                Toast.makeText(context, getString(R.string.provide_valid_date_alert), Toast.LENGTH_SHORT).show()
-            }
 
+            }
         }
 
         dialog.show()
@@ -201,6 +211,24 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
     private fun saveAlert(alert: Alert){
         viewModel.addAlert(alert)
+        setAlertWorker(alert.startDateMillis)
+    }
+
+    private fun setAlertWorker(startMillis: Long){
+
+        val currentMillis = System.currentTimeMillis()
+        val diffMillis = startMillis - currentMillis
+
+        val networkConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val coroutinesWorker = OneTimeWorkRequestBuilder<AlertWorker>()
+            .setConstraints(networkConstraints)
+            .setInitialDelay(diffMillis, TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(coroutinesWorker)
     }
 
     private fun showDatePicker(flag: Int){
@@ -209,7 +237,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         val month: Int = calendar.get(Calendar.MONTH)
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(context!!, { view, schedYear, schedMonth, schedDay ->
+        val datePickerDialog = DatePickerDialog(requireContext(), { view, schedYear, schedMonth, schedDay ->
 
             timePickerDialog(schedYear, schedMonth, schedDay, flag)
 
@@ -222,9 +250,9 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
         val calendar = Calendar.getInstance()
         val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute: Int = calendar.get(Calendar.MINUTE)
+        val minute: Int = calendar.get(Calendar.MINUTE) + 2
 
-        val timePickerDialog = TimePickerDialog(context!!, { view, schedHour, schedMinute ->
+        val timePickerDialog = TimePickerDialog(requireContext(), { view, schedHour, schedMinute ->
 
             val fullDate = "$schedDay-${schedMonth+1}-$schedYear/$schedHour:$schedMinute"
             val sdf = SimpleDateFormat("dd-MM-yyyy/HH:mm")

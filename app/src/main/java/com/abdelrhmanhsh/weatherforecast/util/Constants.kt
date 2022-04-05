@@ -30,6 +30,11 @@ class Constants {
         const val MAPS_FROM_FAVOURITES = 1
         const val MAPS_FROM_SETTINGS = 2
 
+        const val ALERT_CHANNEL = "alert"
+        const val NOTIFICATION_ALERT_NAME = "weather alerts"
+        const val ALERT_NOTIFICATION_ID = 1
+        const val ALERT_ACTION = "alert_api_call"
+
     }
 
 }

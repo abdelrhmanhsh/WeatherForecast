@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
 
+    <!-- fragments -->
+    <string name="fragment_home">Home</string>
+    <string name="fragment_alerts">Alerts</string>
+    <string name="fragment_favourites">Favourites</string>
+    <string name="fragment_maps">Maps</string>
+    <string name="fragment_settings">Settings</string>
+
     <!-- nav drawer -->
     <string name="home">Home</string>
     <string name="favourites">Favourites</string>
@@ -48,6 +55,7 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="delete_alert_message">You are attempting to delete this alert</string>
     <string name="provide_valid_date_alert">You must provide end date after start date for the alert!</string>
+    <string name="provide_time_in_future_alert">You need to provide alert time in the future!</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
@@ -72,5 +80,8 @@
     <string name="oct">Oct</string>
     <string name="nov">Nov</string>
     <string name="dec">Dec</string>
+
+    <!-- notification -->
+    <string name="alert_notification_description">Notification for weather alerts</string>
 
 </resources>
