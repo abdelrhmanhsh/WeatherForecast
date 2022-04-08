@@ -29,7 +29,6 @@ import java.text.SimpleDateFormat
 
 class HomeFragment : Fragment() {
 
-    val TAG = "HomeFragment"
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var viewModel: HomeViewModel
@@ -105,7 +104,7 @@ class HomeFragment : Fragment() {
 
             binding.location.text = userLocation
 
-            if(isInternetAvailable(context!!)) {
+            if(isInternetAvailable(requireContext())) {
                 viewModel.getWeather(latitude, longitude, units, language, API_KEY).observe(this@HomeFragment){ weather ->
 
                     if (weather != null){
@@ -133,7 +132,7 @@ class HomeFragment : Fragment() {
                 Toast.makeText(context, "Internet", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, "Offline", Toast.LENGTH_SHORT).show()
-                viewModel.getWeatherFromLocation(userLocation).observe(this@HomeFragment) { weather ->
+                viewModel.getWeatherFromLocation(userLocation).observe(viewLifecycleOwner) { weather ->
                     if(weather != null){
                         dailyAdapter.setList(weather.daily)
                         hourlyAdapter.setList(weather.hourly)
@@ -170,7 +169,6 @@ class HomeFragment : Fragment() {
 
         binding.currentWeatherImage.load(weatherResponse.current.weather[0].icon)
 
-
         val currentWeather = when(units){
             getString(R.string.metric) -> weatherResponse.current.temp.toInt().toString() + "\u2103"
             getString(R.string.imperial) -> weatherResponse.current.temp.toInt().toString() + "\u2109"
@@ -192,8 +190,6 @@ class HomeFragment : Fragment() {
 
     private fun initRecyclerViews(){
         // daily
-        val dailyList = DailyList(ArrayList())
-        val hourlyList = HourlyList(ArrayList())
         layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = RecyclerView.VERTICAL
         dailyAdapter = DailyAdapter(ArrayList())

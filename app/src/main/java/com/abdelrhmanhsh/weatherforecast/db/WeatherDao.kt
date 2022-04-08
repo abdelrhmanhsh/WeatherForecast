@@ -2,7 +2,7 @@ package com.abdelrhmanhsh.weatherforecast.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.abdelrhmanhsh.weatherforecast.model.Alert
+import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 
@@ -32,5 +32,8 @@ interface WeatherDao {
 
     @Delete
     suspend fun deleteAlert(alert: Alert)
+
+    @Query("Delete From alert Where id = :id")
+    fun deleteAlertById(id: Long)
 
 }

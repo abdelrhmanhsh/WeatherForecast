@@ -1,6 +1,7 @@
 package com.abdelrhmanhsh.weatherforecast.model
 
 import androidx.lifecycle.LiveData
+import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 import com.abdelrhmanhsh.weatherforecast.model.response.AlertChecker
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
@@ -23,5 +24,6 @@ interface RepositoryInterface {
     suspend fun addAlert(alert: Alert)
     fun getAlerts(): LiveData<List<Alert>>
     suspend fun deleteAlert(alert: Alert)
+    fun deleteAlertById(id: Long)
 
 }

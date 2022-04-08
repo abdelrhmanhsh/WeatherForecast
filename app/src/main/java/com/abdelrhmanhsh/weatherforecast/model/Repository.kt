@@ -3,6 +3,7 @@ package com.abdelrhmanhsh.weatherforecast.model
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.abdelrhmanhsh.weatherforecast.db.LocalSource
+import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 import com.abdelrhmanhsh.weatherforecast.model.response.AlertChecker
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
@@ -86,5 +87,9 @@ class Repository(
 
     override suspend fun deleteAlert(alert: Alert) {
         localSource.deleteAlert(alert)
+    }
+
+    override fun deleteAlertById(id: Long) {
+        localSource.deleteAlertById(id)
     }
 }

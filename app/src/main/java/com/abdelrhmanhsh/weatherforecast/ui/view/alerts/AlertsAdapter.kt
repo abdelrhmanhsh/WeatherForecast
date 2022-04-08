@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
-import com.abdelrhmanhsh.weatherforecast.model.Alert
+import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 
 class AlertsAdapter(
     private var alerts: List<Alert>,

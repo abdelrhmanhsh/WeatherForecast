@@ -1,9 +1,7 @@
 package com.abdelrhmanhsh.weatherforecast.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Query
-import com.abdelrhmanhsh.weatherforecast.model.Alert
+import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 
@@ -19,5 +17,6 @@ interface LocalSource {
     suspend fun addAlert(alert: Alert)
     fun getAlerts(): LiveData<List<Alert>>
     suspend fun deleteAlert(alert: Alert)
+    fun deleteAlertById(id: Long)
 
 }

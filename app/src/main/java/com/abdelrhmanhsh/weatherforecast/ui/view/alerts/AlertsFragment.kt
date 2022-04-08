@@ -2,9 +2,7 @@ package com.abdelrhmanhsh.weatherforecast.ui.view.alerts
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.Notification
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,27 +11,29 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.AddAlertDialogBinding
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentAlertsBinding
 import com.abdelrhmanhsh.weatherforecast.db.ConcreteLocalSource
-import com.abdelrhmanhsh.weatherforecast.model.Alert
+import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 import com.abdelrhmanhsh.weatherforecast.model.Repository
 import com.abdelrhmanhsh.weatherforecast.network.WeatherClient
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.alerts.AlertsViewModel
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.alerts.AlertsViewModelFactory
 import com.abdelrhmanhsh.weatherforecast.util.*
 import com.abdelrhmanhsh.weatherforecast.util.AppHelper.Companion.getEquivalentMonth
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_ALERT_ID
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_END_MILLIS
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LANGUAGE
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LATITUDE
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LONGITUDE
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_START_MILLIS
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_UNITS
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.ParseException
@@ -54,7 +54,6 @@ class AlertsFragment : Fragment(), View.OnClickListener {
     private lateinit var adapter: AlertsAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var userPreferences: UserPreferences
-    lateinit var notificationManagerCompat: NotificationManagerCompat
 
     private var startMillisAlert: Long = 0
     private var endMillisAlert: Long = 0
@@ -62,6 +61,8 @@ class AlertsFragment : Fragment(), View.OnClickListener {
     private var endDateAlert: String = ""
     private var startTimeAlert: String = ""
     private var endTimeAlert: String = ""
+    private var language: String = ""
+    private var units: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +77,11 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
         binding.floatingAddAlert.setOnClickListener(this)
         userPreferences = UserPreferences(requireContext())
+
+        lifecycleScope.launch {
+            language = userPreferences.readLanguage()?: "en"
+            units = userPreferences.readTemperature()?: "metric"
+        }
 
         viewModelFactory = AlertsViewModelFactory(
             Repository.getInstance(
@@ -92,7 +98,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getAlerts(){
-        viewModel.getAlerts().observe(this){ alerts ->
+        viewModel.getAlerts().observe(viewLifecycleOwner){ alerts ->
             adapter.setList(alerts)
             adapter.notifyDataSetChanged()
         }
@@ -122,9 +128,12 @@ class AlertsFragment : Fragment(), View.OnClickListener {
             setPositiveButton(getString(R.string.delete)) { dialog, which ->
 
                 viewModel.deleteAlert(alert)
+                WorkManager.getInstance(requireContext()).cancelAllWorkByTag(alert.id.toString())
+
                 Snackbar.make(binding.alertsRecyclerView, getString(R.string.alert_deleted), Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo)) {
                         viewModel.addAlert(alert)
+                        setAlertWorker(alert.id, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
                     }.show()
             }
             setNegativeButton(getString(R.string.cancel)) { dialog, which ->
@@ -141,13 +150,13 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         dialog.setContentView(dialogBinding.root)
 
         startMillisAlert = System.currentTimeMillis() + 120_000 // set start time to two minutes later from now
-        endMillisAlert = System.currentTimeMillis() + 86_400_000 // set end date to one day later from today
+        endMillisAlert = System.currentTimeMillis() + 86_520_000 // set end date to one day later from today
 
-        val dateFormatter = SimpleDateFormat("dd MMM yyyy")
+        val dateFormatter = SimpleDateFormat("dd MMM")
         startDateAlert = dateFormatter.format(Date(startMillisAlert))
         endDateAlert = dateFormatter.format(Date(endMillisAlert))
 
-        val timeFormatter = SimpleDateFormat("hh:mm a")
+        val timeFormatter = SimpleDateFormat("HH:mm")
         startTimeAlert = timeFormatter.format(Date(startMillisAlert))
         endTimeAlert = timeFormatter.format(Date(endMillisAlert))
 
@@ -186,7 +195,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
                 saveAlert(
                     Alert(
-                        id = 0,
+                        id = System.currentTimeMillis(),
                         startDate = startDateAlert,
                         endDate = endDateAlert,
                         startTime = startTimeAlert,
@@ -211,21 +220,33 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
     private fun saveAlert(alert: Alert){
         viewModel.addAlert(alert)
-        setAlertWorker(alert.startDateMillis)
+        setAlertWorker(alert.id, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
     }
 
-    private fun setAlertWorker(startMillis: Long){
+    private fun setAlertWorker(id: Long, startMillis: Long, endMillis: Long, latitude: Double, longitude: Double){
+
+        val data = Data.Builder()
+            .putLong(DATA_ALERT_ID, id)
+            .putDouble(DATA_LATITUDE, latitude)
+            .putDouble(DATA_LONGITUDE, longitude)
+            .putString(DATA_LANGUAGE, language)
+            .putString(DATA_UNITS, units)
+            .putLong(DATA_START_MILLIS, startMillis)
+            .putLong(DATA_END_MILLIS, endMillis)
+            .build()
 
         val currentMillis = System.currentTimeMillis()
         val diffMillis = startMillis - currentMillis
 
-        val networkConstraints = Constraints.Builder()
+        val networkConstraint = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
         val coroutinesWorker = OneTimeWorkRequestBuilder<AlertWorker>()
-            .setConstraints(networkConstraints)
+            .setInputData(data)
+            .setConstraints(networkConstraint)
             .setInitialDelay(diffMillis, TimeUnit.MILLISECONDS)
+            .addTag(id.toString())
             .build()
 
         WorkManager.getInstance(requireContext()).enqueue(coroutinesWorker)
@@ -255,13 +276,14 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         val timePickerDialog = TimePickerDialog(requireContext(), { view, schedHour, schedMinute ->
 
             val fullDate = "$schedDay-${schedMonth+1}-$schedYear/$schedHour:$schedMinute"
-            val sdf = SimpleDateFormat("dd-MM-yyyy/HH:mm")
+            val sdf = SimpleDateFormat("dd-MM-yyyy/hh:mm")
             val dateStr = "$schedDay ${getEquivalentMonth(schedMonth)} $schedYear"
-            var a = "PM"
-            if(schedHour < 12)
-                a = "AM"
+//            var a = "PM"
+//            if(schedHour < 12)
+//                a = "AM"
 
-            val timeStr = "$schedHour:$schedMinute $a"
+//            val timeStr = "$schedHour:$schedMinute $a"
+            val timeStr = "$schedHour:$schedMinute"
 
             try {
                 val date = sdf.parse(fullDate)
