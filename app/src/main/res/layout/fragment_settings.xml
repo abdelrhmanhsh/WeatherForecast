@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.view.settings.SettingsFragment"
-    android:layout_margin="15dp">
+    android:background="@color/main_app_background">
 
     <LinearLayout
         android:id="@+id/linear_location"
@@ -17,8 +17,8 @@
         app:layout_constraintWidth_percent="0.4"
         android:layout_margin="15dp"
         android:padding="15dp"
-        android:background="@drawable/settings_radio_group_background"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/list_item_background">
 
         <TextView
             android:layout_width="match_parent"
@@ -62,7 +62,7 @@
         app:layout_constraintWidth_percent="0.4"
         android:layout_margin="15dp"
         android:padding="15dp"
-        android:background="@drawable/settings_radio_group_background"
+        android:background="@drawable/list_item_background"
         android:orientation="vertical">
 
         <TextView
@@ -106,7 +106,7 @@
         app:layout_constraintWidth_percent="0.4"
         android:layout_margin="15dp"
         android:padding="15dp"
-        android:background="@drawable/settings_radio_group_background"
+        android:background="@drawable/list_item_background"
         android:orientation="vertical">
 
         <TextView
@@ -156,7 +156,7 @@
         app:layout_constraintWidth_percent="0.4"
         android:layout_margin="15dp"
         android:padding="15dp"
-        android:background="@drawable/settings_radio_group_background"
+        android:background="@drawable/list_item_background"
         android:orientation="vertical">
 
         <TextView

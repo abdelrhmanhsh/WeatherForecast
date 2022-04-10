@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الطقس</string>
+
+    <!-- fragments -->
+    <string name="fragment_home">الرئيسية</string>
+    <string name="fragment_alerts">الإنذارات</string>
+    <string name="fragment_favourites">المفضلات</string>
+    <string name="fragment_maps">الخرائط</string>
+    <string name="fragment_settings">الاإعدادات</string>
+
+    <!-- nav drawer -->
+    <string name="home">الرئيسية</string>
+    <string name="favourites">المفضلات</string>
+    <string name="alerts">الإنذارات</string>
+    <string name="settings">الإعدادات</string>
+    <string name="nav_open">فتح</string>
+    <string name="nav_close">إغلاق</string>
+
+    <!-- settings fragment -->
+    <string name="location">الموقع</string>
+    <string name="gps">GPS</string>
+    <string name="map">خريطة</string>
+    <string name="language">اللغة</string>
+    <string name="english">الإنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="temperature">وحدات الحرارة</string>
+    <string name="celsius">مئوية</string>
+    <string name="kelvin">كلفن</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="meter_per_sec">متر / الثانية</string>
+    <string name="mile_per_hour">ميل / الساعة</string>
+
+    <!-- home fragment -->
+    <string name="feels_like">يبدو كأنه</string>
+    <string name="pressure">الضغط</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="wind">الرياح</string>
+    <string name="cloud">الغيوم</string>
+    <string name="ultra_violet">فوق البنفسجي</string>
+    <string name="visibility">الرؤية</string>
+    <string name="metric">metric</string>
+    <string name="imperial">imperial</string>
+    <string name="hpa">هيكتوباسكالس</string>
+    <string name="m_per_s">م / ث</string>
+    <string name="m_per_h">م / س</string>
+    <string name="m">م</string>
+
+    <!-- favourite fragment -->
+
+    <!-- maps fragment -->
+    <string name="connect_to_internet">اتصل بالإنترنت لإتمام هذه العملية!</string>
+
+    <!-- dialogs -->
+    <string name="add_this_location">أضف هذا الموقع</string>
+    <string name="are_you_sure_delete1">هل انت متاكد من حذف</string>
+    <string name="are_you_sure_delete2">من مفضلاتك؟</string>
+    <string name="are_you_sure">هل انت متأكد؟</string>
+    <string name="delete_alert_message">انت علي وشك حذف هذا الإنذار</string>
+    <string name="provide_valid_date_alert">يجب عليك تحديد تاريخ انتهاء بعد تاريخ البدء للإنذار!</string>
+    <string name="provide_time_in_future_alert">يجب عليك تحديد ميعاد الإنذار في المستقبل!</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">الغاء</string>
+    <string name="delete">حذف</string>
+    <string name="from">من</string>
+    <string name="to">إلي</string>
+
+    <!-- snackBars -->
+    <string name="location_deleted">تم حذف الموقع</string>
+    <string name="alert_deleted">تم حذف الإنذار</string>
+    <string name="undo">رجوع</string>
+
+    <!-- more -->
+    <string name="jan">يناير</string>
+    <string name="feb">فبراير</string>
+    <string name="mar">مارس</string>
+    <string name="apr">ابريل</string>
+    <string name="may">مايو</string>
+    <string name="jun">يونيو</string>
+    <string name="jul">يوليو</string>
+    <string name="aug">أغسطس</string>
+    <string name="sep">سبتمبر</string>
+    <string name="oct">اكتوبر</string>
+    <string name="nov">نوفمبر</string>
+    <string name="dec">ديسمبر</string>
+
+    <!-- notification -->
+    <string name="alert_notification_description">إشعار لإنذار الطقس</string>
+
+</resources>

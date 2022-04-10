@@ -1,5 +1,6 @@
 package com.abdelrhmanhsh.weatherforecast.ui.view.settings
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.abdelrhmanhsh.weatherforecast.ui.view.favourites.FavouritesFragmentDi
 import com.abdelrhmanhsh.weatherforecast.util.Constants
 import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
 import kotlinx.coroutines.launch
+import java.util.*
 
 class SettingsFragment : Fragment(), View.OnClickListener{
 
@@ -30,7 +32,7 @@ class SettingsFragment : Fragment(), View.OnClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreferences = UserPreferences(context!!)
+        userPreferences = UserPreferences(requireContext())
         settingRadioButtons()
 
         binding.radioGps.setOnClickListener(this)
@@ -103,6 +105,7 @@ class SettingsFragment : Fragment(), View.OnClickListener{
         lifecycleScope.launch {
             userPreferences.storeLanguagePref(selection)
         }
+//        setLanguage(selection)
     }
 
     private fun selectionTemperature(selection: String){
@@ -116,6 +119,19 @@ class SettingsFragment : Fragment(), View.OnClickListener{
             userPreferences.storeWindSpeedPref(selection)
         }
     }
+
+//    private fun setLanguage(language: String){
+//        val resources = resources
+//        val metrics = resources.displayMetrics
+//        val configuration = resources.configuration
+//        if (language == getString(R.string.arabic)){
+//            configuration.locale = Locale("ar")
+//        } else {
+//            configuration.locale = Locale("en")
+//        }
+//        resources.updateConfiguration(configuration, metrics)
+//        onConfigurationChanged(configuration)
+//    }
 
     override fun onClick(view: View) {
         when(view.id){

@@ -48,6 +48,9 @@
 
     <!-- favourite fragment -->
 
+    <!-- maps fragment -->
+    <string name="connect_to_internet">Connect to Internet First to do this Operation!</string>
+
     <!-- dialogs -->
     <string name="add_this_location">Add this location</string>
     <string name="are_you_sure_delete1">Are you sure you want to delete</string>

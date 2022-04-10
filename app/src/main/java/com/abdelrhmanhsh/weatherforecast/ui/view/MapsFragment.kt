@@ -69,10 +69,18 @@ class MapsFragment : Fragment() {
                 val geocoder = Geocoder(context, Locale.getDefault())
                 val addresses: List<Address> = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
-                city = addresses[0].locality ?: ""
-                country = addresses[0].countryName ?: ""
+                if(!addresses.isNullOrEmpty()){
+                    city = addresses[0].locality ?: ""
+                    country = addresses[0].countryName ?: ""
 
-                Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+                    Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+                } else {
+                    city = ""
+                    country = ""
+
+                    Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+                }
+
             } catch (e: IOException){
                 Log.e(TAG, "error: ${e.message}")
             }
@@ -84,8 +92,8 @@ class MapsFragment : Fragment() {
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(10F))
 
             if(flag == MAPS_FROM_FAVOURITES){
-                Toast.makeText(context, "Coming from favourites", Toast.LENGTH_SHORT).show()
-                if (isInternetAvailable(context!!)){
+//                Toast.makeText(context, "Coming from favourites", Toast.LENGTH_SHORT).show()
+                if (isInternetAvailable(requireContext())){
                     lifecycleScope.launch {
 
                         val temperature: String = userPreferences.readTemperature() ?: getString(R.string.celsius)
@@ -106,10 +114,10 @@ class MapsFragment : Fragment() {
 
                     }
                 } else {
-                    Toast.makeText(context, "Connect to Internet First to this Operation!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Connect to Internet First to do this Operation!", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "Coming from settings", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Coming from settings", Toast.LENGTH_SHORT).show()
                 showDialogSettings(city, country, it.latitude, it.longitude, googleMap)
             }
 
@@ -118,7 +126,7 @@ class MapsFragment : Fragment() {
 
     private fun showDialogFav(city: String, country: String, latitude: Double, longitude: Double, units: String, language: String, googleMap: GoogleMap){
 
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         builder.apply {
             setTitle(city)
             setMessage(getString(R.string.add_this_location))
@@ -140,11 +148,12 @@ class MapsFragment : Fragment() {
                     viewModel.addWeatherToFavourites(saveWeather)
                 }
 
-                val action =
-                    MapsFragmentDirections.actionMapsTFavourites()
-                Navigation.findNavController(view!!).navigate(action)
+//                val action =
+//                    MapsFragmentDirections.actionMapsTFavourites()
+//                Navigation.findNavController(requireView()).navigate(action)
 
             }
+
             setNegativeButton(getString(R.string.cancel)) { dialog, which ->
                 googleMap.clear()
             }
@@ -154,7 +163,7 @@ class MapsFragment : Fragment() {
     }
 
     private fun showDialogSettings(city: String, country: String, latitude: Double, longitude: Double, googleMap: GoogleMap){
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         builder.apply {
             setTitle(city)
             setMessage(getString(R.string.add_this_location))
@@ -164,11 +173,13 @@ class MapsFragment : Fragment() {
                     userPreferences.storeMapLongLatPref(latitude, longitude)
                     userPreferences.storeLastLongLatPref(latitude, longitude)
                     userPreferences.storeUserMapLocationPref("$city, $country")
+                    userPreferences.storeUserLastLocationPref("$city, $country")
                     userPreferences.storeIsFavouritePref(false)
                 }
+
                 val action =
                     MapsFragmentDirections.actionMapsToHome()
-                Navigation.findNavController(view!!).navigate(action)
+                Navigation.findNavController(requireView()).navigate(action)
 
             }
             setNegativeButton(getString(R.string.cancel)) { dialog, which ->
@@ -190,18 +201,18 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
-        userPreferences = UserPreferences(context!!)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        userPreferences = UserPreferences(requireContext())
 
         val args: MapsFragmentArgs =
-            MapsFragmentArgs.fromBundle(arguments!!)
+            MapsFragmentArgs.fromBundle(requireArguments())
         flag = args.flag
 
         viewModelFactory = FavouritesViewModelFactory(
             Repository.getInstance(
-                context!!,
+                requireContext(),
                 WeatherClient.getInstance()!!,
-                ConcreteLocalSource(context!!)
+                ConcreteLocalSource(requireContext())
             )!!
         )
 

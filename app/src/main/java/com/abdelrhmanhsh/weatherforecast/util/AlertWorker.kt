@@ -44,6 +44,8 @@ class AlertWorker(
         val startMillis = incomingData.getLong(DATA_START_MILLIS, -1)
         val endMillis = incomingData.getLong(DATA_END_MILLIS, -1)
 
+        println("doWork: latitude: $latitude longitude: $longitude")
+
         sendToReceiver(id, latitude, longitude, language, units, startMillis, endMillis)
 
         withContext(Dispatchers.IO){
@@ -69,7 +71,7 @@ class AlertWorker(
         val weatherService = WeatherClient.getInstanceRetrofit().create(WeatherService::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val response = weatherService.getAlerts(latitude, longitude, "daily, hourly, minutely", units, lang, apiKey)
+            val response = weatherService.getAlerts(latitude, longitude, "daily,hourly,minutely", units, lang, apiKey)
             if (response.isSuccessful) {
                 val message: String
                 alertWeather = response.body()!!

@@ -1,11 +1,23 @@
 package com.abdelrhmanhsh.weatherforecast.ui.view.home
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +26,6 @@ import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentHomeBinding
 import com.abdelrhmanhsh.weatherforecast.db.ConcreteLocalSource
 import com.abdelrhmanhsh.weatherforecast.model.Repository
-import com.abdelrhmanhsh.weatherforecast.model.response.DailyList
-import com.abdelrhmanhsh.weatherforecast.model.response.HourlyList
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
 import com.abdelrhmanhsh.weatherforecast.network.WeatherClient
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.home.HomeViewModel
@@ -24,10 +34,18 @@ import com.abdelrhmanhsh.weatherforecast.util.*
 import com.abdelrhmanhsh.weatherforecast.util.AppHelper.Companion.isInternetAvailable
 import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
 import com.abdelrhmanhsh.weatherforecast.util.PrivateConstants.Companion.API_KEY
+import com.google.android.gms.location.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
+
+    val TAG = "HomeFragment"
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -37,6 +55,8 @@ class HomeFragment : Fragment() {
     private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var userPreferences: UserPreferences
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,10 +79,125 @@ class HomeFragment : Fragment() {
         )
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
-        getWeather()
+//        getWeather()
 
         initRecyclerViews()
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+//        getLastLocation()
+
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation(){
+        println("getLastLocation")
+        if(checkedPermissions()){
+            println("getLastLocation checkedPermissions")
+            if(isLocationEnabled()){
+                println("getLastLocation checkedPermissions isLocationEnabled")
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener { location ->
+//                    val location: Location = it.result
+                    if(location.result == null){
+                        requestNewLocation()
+                    } else {
+//                        Toast.makeText(requireContext(), "LAST LOCATION Latitude: ${location.result.latitude} Longitude ${location.result.longitude}",
+//                        Toast.LENGTH_SHORT).show()
+
+                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                        val addresses: List<Address> = geocoder.getFromLocation(location.result.latitude, location.result.longitude, 1)
+
+                        val city: String = addresses[0].locality ?: ""
+                        val country: String = addresses[0].countryName ?: ""
+
+                        CoroutineScope(IO).launch {
+                            // take 15
+                            val job = lifecycleScope.launch {
+                                userPreferences.storeUserGPSLocationPref("$city, $country")
+                                userPreferences.storeUserLastLocationPref("$city, $country")
+                                userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
+                                userPreferences.storeLastLongLatPref(location.result.latitude, location.result.longitude)
+//                                userPreferences.storeIsFavouritePref(false)
+                            }
+
+                            Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+                            Log.i(TAG, "getLastLocation: Latitude: ${location.result.latitude}, Longitude: ${location.result.longitude}")
+                            println("before job ${location.result.latitude}")
+                            job.join()
+                            println("after job ${location.result.latitude}")
+                            getWeather()
+                        }
+                    }
+                }
+            }
+        } else {
+            println("getLastLocation requestPermissions")
+            requestPermissions()
+        }
+    }
+
+    private fun checkedPermissions() : Boolean {
+        return (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun isLocationEnabled() : Boolean {
+        val locationManager: LocationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+    private fun enableLocationManager(){
+        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocation(){
+        println("requestNewLocation")
+        val locationRequest: LocationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setInterval(5)
+            .setFastestInterval(0)
+            .setNumUpdates(1)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper()!!)
+        getWeather()
+    }
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val location = locationResult.lastLocation
+            println("location Callback: ${location.latitude} ${location.longitude}")
+//            Toast.makeText(requireContext(), "Latitude: ${location.latitude} Longitude ${location.longitude}",
+//                Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun requestPermissions(){
+        println("requestPermissions")
+        ActivityCompat.requestPermissions(requireActivity(), arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ), Constants.LOCATION_PERMISSION_ID
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == Constants.LOCATION_PERMISSION_ID){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                println("onRequestPermissionsResult inside")
+                getLastLocation()
+            }
+        }
+//        else{
+////            println("onRequestPermissionsResult inside")
+//        }
+        println("onRequestPermissionsResult")
     }
 
     private fun getWeather(){
@@ -83,8 +218,15 @@ class HomeFragment : Fragment() {
             } else {
                 if(userPreferences.readLocation() == getString(R.string.map)){
                     userLocation = userPreferences.readUserMapLocation().toString()
-                    latitude = userPreferences.readMapLatitude()!! // TODO crashes if user doesn't select any location from map
-                    longitude = userPreferences.readMapLongitude()!!
+                    if (userPreferences.readUserMapLocation().isNullOrEmpty() || userLocation == "null"){
+                        if(userPreferences.readUserLastLocation().isNullOrEmpty() || userLocation == "null"){
+                            userLocation = "Unknown"
+                        }
+
+                    }
+
+                    latitude = userPreferences.readMapLatitude()?: userPreferences.readLastLatitude()!!
+                    longitude = userPreferences.readMapLongitude()?: userPreferences.readLastLongitude()!!
                 }
             }
 
@@ -105,7 +247,7 @@ class HomeFragment : Fragment() {
             binding.location.text = userLocation
 
             if(isInternetAvailable(requireContext())) {
-                viewModel.getWeather(latitude, longitude, units, language, API_KEY).observe(this@HomeFragment){ weather ->
+                viewModel.getWeather(latitude, longitude, units, language, API_KEY).observe(viewLifecycleOwner){ weather ->
 
                     if (weather != null){
                         dailyAdapter.setList(weather.daily)
@@ -129,9 +271,9 @@ class HomeFragment : Fragment() {
                         viewModel.insertWeather(saveWeather)
                     }
                 }
-                Toast.makeText(context, "Internet", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Internet", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "Offline", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Offline", Toast.LENGTH_SHORT).show()
                 viewModel.getWeatherFromLocation(userLocation).observe(viewLifecycleOwner) { weather ->
                     if(weather != null){
                         dailyAdapter.setList(weather.daily)
@@ -212,6 +354,19 @@ class HomeFragment : Fragment() {
         val verticalSpacingItemDecoration = VerticalSpacingItemDecoration(10)
         binding.hourlyRecyclerView.removeItemDecoration(verticalSpacingItemDecoration)
         binding.hourlyRecyclerView.addItemDecoration(verticalSpacingItemDecoration)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(!isLocationEnabled())
+            enableLocationManager()
+        println("onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        println("onResume")
+        getLastLocation()
     }
 
 }

@@ -1,6 +1,5 @@
 package com.abdelrhmanhsh.weatherforecast.ui.view.home
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.model.response.Daily
-import com.abdelrhmanhsh.weatherforecast.model.response.DailyList
 import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
 import java.text.SimpleDateFormat
 

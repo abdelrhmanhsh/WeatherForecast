@@ -9,6 +9,7 @@ import com.abdelrhmanhsh.weatherforecast.model.response.Alert
 import com.abdelrhmanhsh.weatherforecast.model.Converters
 import com.abdelrhmanhsh.weatherforecast.model.response.FavouriteWeather
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.APP_DATABASE_NAME
 
 @Database(entities = [WeatherResponse::class, FavouriteWeather::class, Alert::class], version = 1)
 @TypeConverters(Converters::class)
@@ -25,7 +26,7 @@ abstract class AppDatabase: RoomDatabase() {
             if (instance == null) {
                 instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java, "weather"
+                    AppDatabase::class.java, APP_DATABASE_NAME
                 )
                     .build()
             }

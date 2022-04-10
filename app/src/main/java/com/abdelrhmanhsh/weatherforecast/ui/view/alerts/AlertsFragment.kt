@@ -26,7 +26,6 @@ import com.abdelrhmanhsh.weatherforecast.network.WeatherClient
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.alerts.AlertsViewModel
 import com.abdelrhmanhsh.weatherforecast.ui.viewmodel.alerts.AlertsViewModelFactory
 import com.abdelrhmanhsh.weatherforecast.util.*
-import com.abdelrhmanhsh.weatherforecast.util.AppHelper.Companion.getEquivalentMonth
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_ALERT_ID
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_END_MILLIS
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LANGUAGE
@@ -36,6 +35,7 @@ import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_START_MIL
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_UNITS
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -132,8 +132,14 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
                 Snackbar.make(binding.alertsRecyclerView, getString(R.string.alert_deleted), Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo)) {
-                        viewModel.addAlert(alert)
-                        setAlertWorker(alert.id, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
+
+                        try {
+                            viewModel.addAlert(alert)
+                            setAlertWorker(alert.id, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
+                        } catch (e: IllegalStateException) {
+                            println("couldn't delete")
+                        }
+
                     }.show()
             }
             setNegativeButton(getString(R.string.cancel)) { dialog, which ->
@@ -169,8 +175,22 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         var latitude = 0.0
         var longitude = 0.0
         lifecycleScope.launch {
-            latitude = userPreferences.readLastLatitude()!!
-            longitude = userPreferences.readLastLongitude()!!
+//            latitude = userPreferences.readLastLatitude()!!
+//            longitude = userPreferences.readLastLongitude()!!
+
+            latitude = userPreferences.readGPSLatitude()!!
+            longitude = userPreferences.readGPSLongitude()!!
+
+            if (userPreferences.readIsFavourite() == true){
+                latitude = userPreferences.readFavLatitude()!!
+                longitude = userPreferences.readFavLongitude()!!
+            } else {
+                if(userPreferences.readLocation() == getString(R.string.map)){
+                    latitude = userPreferences.readMapLatitude()!!
+                    longitude = userPreferences.readMapLongitude()!!
+                }
+            }
+
         }
 
         dialogBinding.linearFrom.setOnClickListener {
@@ -267,6 +287,24 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         datePickerDialog.show()
     }
 
+    fun getEquivalentMonth(month: Int): String {
+        return when (month) {
+            0 -> getString(R.string.jan)
+            1 -> getString(R.string.feb)
+            2 -> getString(R.string.mar)
+            3 -> getString(R.string.apr)
+            4 -> getString(R.string.may)
+            5 -> getString(R.string.jun)
+            6 -> getString(R.string.jul)
+            7 -> getString(R.string.aug)
+            8 -> getString(R.string.sep)
+            9 -> getString(R.string.oct)
+            10 -> getString(R.string.nov)
+            11 -> getString(R.string.dec)
+            else -> "Err"
+        }
+    }
+
     private fun timePickerDialog(schedYear: Int, schedMonth: Int, schedDay: Int, flag: Int){
 
         val calendar = Calendar.getInstance()
@@ -278,6 +316,9 @@ class AlertsFragment : Fragment(), View.OnClickListener {
             val fullDate = "$schedDay-${schedMonth+1}-$schedYear/$schedHour:$schedMinute"
             val sdf = SimpleDateFormat("dd-MM-yyyy/hh:mm")
             val dateStr = "$schedDay ${getEquivalentMonth(schedMonth)} $schedYear"
+
+
+
 //            var a = "PM"
 //            if(schedHour < 12)
 //                a = "AM"

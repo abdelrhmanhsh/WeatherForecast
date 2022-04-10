@@ -24,11 +24,16 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import android.location.Geocoder
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -41,23 +46,120 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+//    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var userPreferences: UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+
+//        setSupportActionBar(binding.toolbar)
+//        initNavDrawer()
+//        initNavGraph()
+//
+////        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+////        getLastLocation()
+//
+//        firebaseAnalytics = Firebase.analytics
+//        userPreferences = UserPreferences(this)
+
+//        val config = resources.configuration
+//        val lang = "ar" // your language code
+//        val locale = Locale(lang)
+//        Locale.setDefault(locale)
+//        config.setLocale(locale)
+//
+//        createConfigurationContext(config)
+//        resources.updateConfiguration(config, resources.displayMetrics)
+
+//        val job = CoroutineScope(IO).launch {
+//            setupUserLanguage()
+//        }
+
+//        CoroutineScope(IO).launch {
+//            userPreferences = UserPreferences(this@MainActivity)
+//            settingUpUserLanguage()
+//            withContext(Main){
+//
+//            }
+//        }
+
+
+//        lifecycleScope.launch {
+//            var language = userPreferences.readLanguage()
+//            println("PREF LANGUAGE $language")
+//            if (language != getString(R.string.arabic) || language.isNullOrEmpty()){
+//                language = "en"
+//            } else {
+//                language = "ar"
+//            }
+//
+//            val config = resources.configuration
+////            val lang = language // your language code
+//            val locale = Locale(language)
+//            Locale.setDefault(locale)
+//            config.setLocale(locale)
+//
+//            createConfigurationContext(config)
+//            resources.updateConfiguration(config, resources.displayMetrics)
+//            println("main language: $language")
+//        }
+
+//        val config = resources.configuration
+//        val lang = "ar" // your language code
+//        val locale = Locale(lang)
+//        Locale.setDefault(locale)
+//        config.setLocale(locale)
+////
+//        createConfigurationContext(config)
+//        resources.updateConfiguration(config, resources.displayMetrics)
+////        println("main language: $language")
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+//        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         initNavDrawer()
         initNavGraph()
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLastLocation()
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+//        getLastLocation()
 
         firebaseAnalytics = Firebase.analytics
-        userPreferences = UserPreferences(this)
+//        userPreferences = UserPreferences(this)
+//        println("user language: ${Locale.getDefault().displayLanguage}")
+    }
+
+    private fun settingUpUserLanguage(){
+        lifecycleScope.launch {
+            var language = userPreferences.readLanguage()
+            println("PREF LANGUAGE $language")
+            if (language != getString(R.string.arabic) || language.isNullOrEmpty()){
+                language = "en"
+            } else {
+                language = "ar"
+            }
+
+            val config = resources.configuration
+//            val lang = language // your language code
+            val locale = Locale(language)
+            Locale.setDefault(locale)
+            config.setLocale(locale)
+
+            createConfigurationContext(config)
+            resources.updateConfiguration(config, resources.displayMetrics)
+            println("main language: $language")
+        }
+//        val config = resources.configuration
+//        val lang = "ar" // your language code
+//        val locale = Locale(lang)
+//        Locale.setDefault(locale)
+//        config.setLocale(locale)
+//
+//        createConfigurationContext(config)
+//        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     private fun initNavDrawer(){
@@ -80,101 +182,101 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    @SuppressLint("MissingPermission")
-    private fun getLastLocation(){
-        if(checkedPermissions()){
-            if(isLocationEnabled()){
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener { location ->
-//                    val location: Location = it.result
-                    if(location.result == null){
-                        requestNewLocation()
-                    } else {
-//                        Toast.makeText(this, "Latitude: ${location.result.latitude} Longitude ${location.result.longitude}",
-//                        Toast.LENGTH_SHORT).show()
+//    @SuppressLint("MissingPermission")
+//    private fun getLastLocation(){
+//        if(checkedPermissions()){
+//            if(isLocationEnabled()){
+//                fusedLocationProviderClient.lastLocation.addOnCompleteListener { location ->
+////                    val location: Location = it.result
+//                    if(location.result == null){
+//                        requestNewLocation()
+//                    } else {
+////                        Toast.makeText(this, "Latitude: ${location.result.latitude} Longitude ${location.result.longitude}",
+////                        Toast.LENGTH_SHORT).show()
+//
+//                        val geocoder = Geocoder(this, Locale.getDefault())
+//                        val addresses: List<Address> = geocoder.getFromLocation(location.result.latitude, location.result.longitude, 1)
+//
+//                        val city: String = addresses[0].locality ?: ""
+//                        val country: String = addresses[0].countryName ?: ""
+//
+//                        // take 15
+//                        lifecycleScope.launch {
+//                            userPreferences.storeUserGPSLocationPref("$city, $country")
+//                            userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
+//                            userPreferences.storeLastLongLatPref(location.result.latitude, location.result.longitude)
+//                            userPreferences.storeIsFavouritePref(false)
+//                        }
+//
+//                        Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
+//                        Log.i(TAG, "getLastLocation: Latitude: ${location.result.latitude}, Longitude: ${location.result.longitude}")
+//                    }
+//                }
+//            }
+//        } else {
+//            requestPermissions()
+//        }
+//    }
+//
+//    private fun checkedPermissions() : Boolean {
+//        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+//            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+//    }
+//
+//    private fun isLocationEnabled() : Boolean {
+//        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+//    }
+//
+//    private fun enableLocationManager(){
+//        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+//    }
+//
+//    @SuppressLint("MissingPermission")
+//    private fun requestNewLocation(){
+//        val locationRequest: LocationRequest = LocationRequest.create()
+//            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+//            .setInterval(5)
+//            .setFastestInterval(0)
+//            .setNumUpdates(1)
+//
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+//        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper()!!)
+//    }
+//
+//    private val locationCallback: LocationCallback = object : LocationCallback() {
+//        override fun onLocationResult(locationResult: LocationResult) {
+//            val location = locationResult.lastLocation
+////            Toast.makeText(this@MainActivity, "Latitude: ${location.latitude} Longitude ${location.longitude}",
+////                Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//
+//    private fun requestPermissions(){
+//        ActivityCompat.requestPermissions(this, arrayOf(
+//            Manifest.permission.ACCESS_COARSE_LOCATION,
+//            Manifest.permission.ACCESS_FINE_LOCATION
+//        ), Constants.LOCATION_PERMISSION_ID
+//        )
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if(requestCode == Constants.LOCATION_PERMISSION_ID){
+//            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                getLastLocation()
+//            }
+//        }
+//    }
 
-                        val geocoder = Geocoder(this, Locale.getDefault())
-                        val addresses: List<Address> = geocoder.getFromLocation(location.result.latitude, location.result.longitude, 1)
-
-                        val city: String = addresses[0].locality ?: ""
-                        val country: String = addresses[0].countryName ?: ""
-
-                        // take 15
-                        lifecycleScope.launch {
-                            userPreferences.storeUserGPSLocationPref("$city, $country")
-                            userPreferences.storeGPSLongLatPref(location.result.latitude, location.result.longitude)
-                            userPreferences.storeLastLongLatPref(location.result.latitude, location.result.longitude)
-                            userPreferences.storeIsFavouritePref(false)
-                        }
-
-                        Log.i(TAG, "getLastLocation: FULL LOCATION: City: ${city.take(15)}, country: $country")
-                        Log.i(TAG, "getLastLocation: Latitude: ${location.result.latitude}, Longitude: ${location.result.longitude}")
-                    }
-                }
-            }
-        } else {
-            requestPermissions()
-        }
-    }
-
-    private fun checkedPermissions() : Boolean {
-        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-    }
-
-    private fun isLocationEnabled() : Boolean {
-        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-    }
-
-    private fun enableLocationManager(){
-        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun requestNewLocation(){
-        val locationRequest: LocationRequest = LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(5)
-            .setFastestInterval(0)
-            .setNumUpdates(1)
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper()!!)
-    }
-
-    private val locationCallback: LocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            val location = locationResult.lastLocation
-//            Toast.makeText(this@MainActivity, "Latitude: ${location.latitude} Longitude ${location.longitude}",
-//                Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun requestPermissions(){
-        ActivityCompat.requestPermissions(this, arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ), Constants.LOCATION_PERMISSION_ID
-        )
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == Constants.LOCATION_PERMISSION_ID){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getLastLocation()
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if(!isLocationEnabled())
-            enableLocationManager()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        if(!isLocationEnabled())
+//            enableLocationManager()
+//    }
 }

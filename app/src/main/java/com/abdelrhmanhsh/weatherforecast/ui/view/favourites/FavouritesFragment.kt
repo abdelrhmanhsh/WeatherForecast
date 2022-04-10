@@ -47,13 +47,13 @@ class FavouritesFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.floatingAddFavourite.setOnClickListener(this)
-        userPreferences = UserPreferences(context!!)
+        userPreferences = UserPreferences(requireContext())
 
         viewModelFactory = FavouritesViewModelFactory(
             Repository.getInstance(
-                context!!,
+                requireContext(),
                 WeatherClient.getInstance()!!,
-                ConcreteLocalSource(context!!)
+                ConcreteLocalSource(requireContext())
             )!!
         )
 
@@ -63,7 +63,7 @@ class FavouritesFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getFavourites(){
-        viewModel.getFavourites().observe(this){ favourites ->
+        viewModel.getFavourites().observe(viewLifecycleOwner){ favourites ->
             adapter.setList(favourites)
             adapter.notifyDataSetChanged()
         }
@@ -91,6 +91,7 @@ class FavouritesFragment : Fragment(), View.OnClickListener {
     private fun getFavWeather(favouriteWeather: FavouriteWeather){
         lifecycleScope.launch {
             userPreferences.storeUserFavLocationPref(favouriteWeather.location)
+            userPreferences.storeUserLastLocationPref(favouriteWeather.location)
             userPreferences.storeFavLongLatPref(favouriteWeather.lat, favouriteWeather.lon)
             userPreferences.storeLastLongLatPref(favouriteWeather.lat, favouriteWeather.lon)
             userPreferences.storeIsFavouritePref(true)
@@ -100,12 +101,12 @@ class FavouritesFragment : Fragment(), View.OnClickListener {
         }
 
         val action = FavouritesFragmentDirections.actionFavouritesToHome()
-        Navigation.findNavController(view!!).navigate(action)
+        Navigation.findNavController(requireView()).navigate(action)
 
     }
 
     private fun deleteWeather(favouriteWeather: FavouriteWeather){
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         builder.apply {
             setTitle(favouriteWeather.location)
             setMessage("${getString(R.string.are_you_sure_delete1)} ${favouriteWeather.location} ${getString(R.string.are_you_sure_delete2)}")
