@@ -1,3 +1,95 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
+
+    <!-- fragments -->
+    <string name="fragment_home">Home</string>
+    <string name="fragment_alerts">Alerts</string>
+    <string name="fragment_favourites">Favourites</string>
+    <string name="fragment_maps">Maps</string>
+    <string name="fragment_settings">Settings</string>
+
+    <!-- nav drawer -->
+    <string name="home">Home</string>
+    <string name="favourites">Favourites</string>
+    <string name="alerts">Alerts</string>
+    <string name="settings">Settings</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
+    <!-- settings fragment -->
+    <string name="location">Location</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">العربيه</string>
+    <string name="temperature">Temperature</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="meter_per_sec">Meter / Sec</string>
+    <string name="mile_per_hour">Mile / Hour</string>
+    <string name="language_changed_alert">تم تغيير اللغه! أعد تشغيل التطبيق لاتمام التغييرات</string>
+
+    <!-- home fragment -->
+    <string name="feels_like">Feels like</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="cloud">Cloud</string>
+    <string name="ultra_violet">Ultra Violet</string>
+    <string name="visibility">Visibility</string>
+    <string name="metric" translatable="false">metric</string>
+    <string name="imperial" translatable="false">imperial</string>
+    <string name="hpa">hpa</string>
+    <string name="m_per_s">m/s</string>
+    <string name="m_per_h">m/h</string>
+    <string name="m">m</string>
+
+    <!-- favourite fragment -->
+
+    <!-- maps fragment -->
+    <string name="connect_to_internet">Connect to Internet First to do this Operation!</string>
+
+    <!-- dialogs -->
+    <string name="add_this_location">Add this location</string>
+    <string name="are_you_sure_delete1">Are you sure you want to delete</string>
+    <string name="are_you_sure_delete2">from your favourites?</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete_alert_message">You are attempting to delete this alert</string>
+    <string name="provide_valid_date_alert">You must provide end date after start date for the alert!</string>
+    <string name="provide_time_in_future_alert">You need to provide alert time in the future!</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="allow_location">You need to allow location permission to continue using the app!</string>
+
+    <!-- snackBars -->
+    <string name="location_deleted">Location Deleted</string>
+    <string name="alert_deleted">Alert Deleted</string>
+    <string name="undo">Undo</string>
+
+    <!-- more -->
+    <string name="jan">Jan</string>
+    <string name="feb">Feb</string>
+    <string name="mar">Mar</string>
+    <string name="apr">Apr</string>
+    <string name="may">May</string>
+    <string name="jun">Jun</string>
+    <string name="jul">Jul</string>
+    <string name="aug">Aug</string>
+    <string name="sep">Sep</string>
+    <string name="oct">Oct</string>
+    <string name="nov">Nov</string>
+    <string name="dec">Dec</string>
+    <string name="ok">OK</string>
+
+    <!-- notification -->
+    <string name="alert_notification_description">Notification for weather alerts</string>
+    <string name="alert_notification_title">Alert Notification In</string>
+    <string name="weather_is_fine">Weather is fine, no alerts for the scheduled time period!</string>
+
 </resources>
