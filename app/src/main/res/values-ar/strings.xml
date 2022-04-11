@@ -7,7 +7,7 @@
     <string name="fragment_alerts">الإنذارات</string>
     <string name="fragment_favourites">المفضلات</string>
     <string name="fragment_maps">الخرائط</string>
-    <string name="fragment_settings">الاإعدادات</string>
+    <string name="fragment_settings">الإعدادات</string>
 
     <!-- nav drawer -->
     <string name="home">الرئيسية</string>
@@ -22,8 +22,8 @@
     <string name="gps">GPS</string>
     <string name="map">خريطة</string>
     <string name="language">اللغة</string>
-    <string name="english">الإنجليزية</string>
-    <string name="arabic">العربية</string>
+    <string name="english">English</string>
+    <string name="arabic">العربيه</string>
     <string name="temperature">وحدات الحرارة</string>
     <string name="celsius">مئوية</string>
     <string name="kelvin">كلفن</string>
@@ -31,6 +31,7 @@
     <string name="wind_speed">سرعة الرياح</string>
     <string name="meter_per_sec">متر / الثانية</string>
     <string name="mile_per_hour">ميل / الساعة</string>
+    <string name="language_changed_alert">Language changed!, reopen the app to apply changes!</string>
 
     <!-- home fragment -->
     <string name="feels_like">يبدو كأنه</string>
@@ -40,8 +41,6 @@
     <string name="cloud">الغيوم</string>
     <string name="ultra_violet">فوق البنفسجي</string>
     <string name="visibility">الرؤية</string>
-    <string name="metric">metric</string>
-    <string name="imperial">imperial</string>
     <string name="hpa">هيكتوباسكالس</string>
     <string name="m_per_s">م / ث</string>
     <string name="m_per_h">م / س</string>
@@ -65,6 +64,7 @@
     <string name="delete">حذف</string>
     <string name="from">من</string>
     <string name="to">إلي</string>
+    <string name="allow_location">عليك السماح بإذن الموقع حتي تتمكن من استخدام التطبيق!</string>
 
     <!-- snackBars -->
     <string name="location_deleted">تم حذف الموقع</string>
@@ -84,8 +84,11 @@
     <string name="oct">اكتوبر</string>
     <string name="nov">نوفمبر</string>
     <string name="dec">ديسمبر</string>
+    <string name="ok">استكمال</string>
 
     <!-- notification -->
     <string name="alert_notification_description">إشعار لإنذار الطقس</string>
+    <string name="alert_notification_title">إشعار للتنبيه في</string>
+    <string name="weather_is_fine">الطقس علي ما يرام، لا توجد إنذارات في الوقت الحالي!</string>
 
 </resources>

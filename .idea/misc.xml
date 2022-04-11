@@ -9,18 +9,24 @@
         <entry key="app/src/main/res/drawable/list_item_background.xml" value="0.2111111111111111" />
         <entry key="app/src/main/res/drawable/radius_holo_blue_background.xml" value="0.24351851851851852" />
         <entry key="app/src/main/res/drawable/settings_radio_group_background.xml" value="0.2361111111111111" />
+        <entry key="app/src/main/res/layout/activity_initial_dialog.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14402173913043478" />
         <entry key="app/src/main/res/layout/add_alert_dialog.xml" value="0.21492830182832676" />
         <entry key="app/src/main/res/layout/alert_list_item.xml" value="0.26078608479101495" />
         <entry key="app/src/main/res/layout/daily_weather_list_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/favourite_list_item.xml" value="0.2077231860893432" />
         <entry key="app/src/main/res/layout/fragment_alerts.xml" value="0.19927536231884058" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_favourites.xml" value="0.19927536231884058" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.24127442038055513" />
+        <entry key="app/src/main/res/layout/fragment_initial_dialog.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.19927536231884058" />
+        <entry key="app/src/main/res/layout/fragment_provide_location_dialog.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.19927536231884058" />
         <entry key="app/src/main/res/layout/hourly_weather_list_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/initial_setup_dialog.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.20380434782608695" />
+        <entry key="app/src/main/res/layout/provide_location_dialog.xml" value="0.12411347517730496" />
         <entry key="app/src/main/res/menu/nav_drawer_menu.xml" value="0.25364583333333335" />
       </map>
     </option>

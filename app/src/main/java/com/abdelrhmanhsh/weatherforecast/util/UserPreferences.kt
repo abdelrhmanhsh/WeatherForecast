@@ -180,8 +180,8 @@ class UserPreferences(val context: Context) {
     }
 
     suspend fun readIsFavourite(): Boolean?{
-        val windSpeed = dataStore.data.first()
-        return windSpeed[isFavouritePref]
+        val isFavourite = dataStore.data.first()
+        return isFavourite[isFavouritePref]
     }
 
     suspend fun readLocation(): String?{

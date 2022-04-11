@@ -53,7 +53,6 @@
             android:id="@+id/start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="26 Feb 2022"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -61,7 +60,6 @@
             android:id="@+id/start_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2:52 AM"
             android:textColor="@color/secondary_text"
             android:textSize="18sp"
             android:layout_marginTop="10dp"/>
@@ -86,7 +84,6 @@
             android:id="@+id/end_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="28 Feb 2022"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -94,7 +91,6 @@
             android:id="@+id/end_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5:52 AM"
             android:textColor="@color/secondary_text"
             android:textSize="18sp"
             android:layout_marginTop="10dp"/>

@@ -22,7 +22,7 @@
     <string name="map">Map</string>
     <string name="language">Language</string>
     <string name="english">English</string>
-    <string name="arabic">Arabic</string>
+    <string name="arabic">العربيه</string>
     <string name="temperature">Temperature</string>
     <string name="celsius">Celsius</string>
     <string name="kelvin">Kelvin</string>
@@ -30,6 +30,7 @@
     <string name="wind_speed">Wind Speed</string>
     <string name="meter_per_sec">Meter / Sec</string>
     <string name="mile_per_hour">Mile / Hour</string>
+    <string name="language_changed_alert">تم تغيير اللغه! أعد تشغيل التطبيق لاتمام التغييرات</string>
 
     <!-- home fragment -->
     <string name="feels_like">Feels like</string>
@@ -39,8 +40,8 @@
     <string name="cloud">Cloud</string>
     <string name="ultra_violet">Ultra Violet</string>
     <string name="visibility">Visibility</string>
-    <string name="metric">metric</string>
-    <string name="imperial">imperial</string>
+    <string name="metric" translatable="false">metric</string>
+    <string name="imperial" translatable="false">imperial</string>
     <string name="hpa">hpa</string>
     <string name="m_per_s">m/s</string>
     <string name="m_per_h">m/h</string>
@@ -64,6 +65,7 @@
     <string name="delete">Delete</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="allow_location">You need to allow location permission to continue using the app!</string>
 
     <!-- snackBars -->
     <string name="location_deleted">Location Deleted</string>
@@ -83,8 +85,11 @@
     <string name="oct">Oct</string>
     <string name="nov">Nov</string>
     <string name="dec">Dec</string>
+    <string name="ok">OK</string>
 
     <!-- notification -->
     <string name="alert_notification_description">Notification for weather alerts</string>
+    <string name="alert_notification_title">Alert Notification In</string>
+    <string name="weather_is_fine">Weather is fine, no alerts for the scheduled time period!</string>
 
 </resources>

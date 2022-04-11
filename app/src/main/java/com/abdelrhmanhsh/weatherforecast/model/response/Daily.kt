@@ -4,7 +4,7 @@ data class Daily(
     val clouds: Int,
     val dew_point: Double,
     val dt: Int,
-    val feels_like: FeelsLike, // ignore
+    val feels_like: FeelsLike,
     val humidity: Int,
     val moon_phase: Double,
     val moonrise: Int,

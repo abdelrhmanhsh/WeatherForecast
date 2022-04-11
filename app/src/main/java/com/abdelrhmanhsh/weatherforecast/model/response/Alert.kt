@@ -8,6 +8,7 @@ data class Alert(
 
     @PrimaryKey
     val id: Long,
+    val location: String,
     val startDate: String,
     val endDate: String,
     val startTime: String,

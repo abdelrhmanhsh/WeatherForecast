@@ -20,6 +20,7 @@ import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_END_MILLI
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_FLAG
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LANGUAGE
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LATITUDE
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LOCATION
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LONGITUDE
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_START_MILLIS
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_UNITS
@@ -37,6 +38,7 @@ class AlertWorker(
 
         val incomingData = inputData
         val id = incomingData.getLong(DATA_ALERT_ID, -1)
+        val location = incomingData.getString(DATA_LOCATION)?: "Unknown"
         val latitude = incomingData.getDouble(DATA_LATITUDE, 0.0)
         val longitude = incomingData.getDouble(DATA_LONGITUDE, 0.0)
         val language = incomingData.getString(DATA_LANGUAGE)?: "en"
@@ -46,10 +48,11 @@ class AlertWorker(
 
         println("doWork: latitude: $latitude longitude: $longitude")
 
-        sendToReceiver(id, latitude, longitude, language, units, startMillis, endMillis)
+        sendToReceiver(id, location, latitude, longitude, language, units, startMillis, endMillis)
 
         withContext(Dispatchers.IO){
             getAlerts(
+                location = location,
                 latitude = latitude,
                 longitude = longitude,
                 units = units,
@@ -67,7 +70,7 @@ class AlertWorker(
 
     lateinit var alertWeather: AlertChecker
 
-    fun getAlerts(latitude: Double, longitude: Double, units: String, lang: String, apiKey: String) {
+    fun getAlerts(location: String, latitude: Double, longitude: Double, units: String, lang: String, apiKey: String) {
         val weatherService = WeatherClient.getInstanceRetrofit().create(WeatherService::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -76,29 +79,32 @@ class AlertWorker(
                 val message: String
                 alertWeather = response.body()!!
                 if(alertWeather.alerts.isNullOrEmpty()){
-                    message = "Everything is fine"
+
+                    message = context.resources.getString(R.string.weather_is_fine)
                 } else {
                     message = alertWeather.alerts[0].description
                 }
-                sendAlertNotification(message)
+                sendAlertNotification(location, message)
             }
         }
     }
 
-    private fun sendAlertNotification(description: String){
+    private fun sendAlertNotification(location: String, description: String){
         notificationManagerCompat = NotificationManagerCompat.from(context)
 
         val notification: Notification = NotificationCompat.Builder(context, ALERT_CHANNEL)
             .setSmallIcon(R.drawable.weather_unknown)
-            .setContentTitle("Alert Notification")
+            .setContentTitle("${context.resources.getString(R.string.alert_notification_title)} $location")
             .setContentText(description)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(description))
             .setAutoCancel(true)
             .build()
 
         notificationManagerCompat.notify(ALERT_NOTIFICATION_ID, notification)
     }
 
-    private fun sendToReceiver(id: Long, latitude: Double, longitude: Double, language: String, units: String, startMillis: Long, endMillis: Long){
+    private fun sendToReceiver(id: Long, location: String, latitude: Double, longitude: Double, language: String, units: String, startMillis: Long, endMillis: Long){
         val intentFilter = IntentFilter(ALERT_ACTION)
         applicationContext.registerReceiver(alertReceiver, intentFilter)
         var sendAgain = false
@@ -112,6 +118,7 @@ class AlertWorker(
 
         val intent = Intent()
         intent.putExtra(DATA_ALERT_ID, id)
+        intent.putExtra(DATA_LOCATION, location)
         intent.putExtra(DATA_LATITUDE, latitude)
         intent.putExtra(DATA_LONGITUDE, longitude)
         intent.putExtra(DATA_LANGUAGE, language)

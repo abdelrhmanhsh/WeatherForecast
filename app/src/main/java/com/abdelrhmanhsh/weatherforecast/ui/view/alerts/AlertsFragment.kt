@@ -30,6 +30,7 @@ import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_ALERT_ID
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_END_MILLIS
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LANGUAGE
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LATITUDE
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LOCATION
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LONGITUDE
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_START_MILLIS
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_UNITS
@@ -135,7 +136,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
                         try {
                             viewModel.addAlert(alert)
-                            setAlertWorker(alert.id, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
+                            setAlertWorker(alert.id, alert.location, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
                         } catch (e: IllegalStateException) {
                             println("couldn't delete")
                         }
@@ -174,23 +175,34 @@ class AlertsFragment : Fragment(), View.OnClickListener {
         // get last lat long to set alert with it
         var latitude = 0.0
         var longitude = 0.0
+        var location = "Unknown"
         lifecycleScope.launch {
 //            latitude = userPreferences.readLastLatitude()!!
 //            longitude = userPreferences.readLastLongitude()!!
 
             latitude = userPreferences.readGPSLatitude()!!
             longitude = userPreferences.readGPSLongitude()!!
+            location = userPreferences.readUserGPSLocation().toString()
 
             if (userPreferences.readIsFavourite() == true){
+                location = userPreferences.readUserFavLocation().toString()
                 latitude = userPreferences.readFavLatitude()!!
                 longitude = userPreferences.readFavLongitude()!!
             } else {
+
                 if(userPreferences.readLocation() == getString(R.string.map)){
-                    latitude = userPreferences.readMapLatitude()!!
-                    longitude = userPreferences.readMapLongitude()!!
+                    location = userPreferences.readUserMapLocation().toString()
+                    if (userPreferences.readUserMapLocation().isNullOrEmpty() || location == "null"){
+                        if(userPreferences.readUserLastLocation().isNullOrEmpty() || location == "null"){
+                            location = "Unknown"
+                        }
+
+                    }
+
+                    latitude = userPreferences.readMapLatitude()?: userPreferences.readLastLatitude()!!
+                    longitude = userPreferences.readMapLongitude()?: userPreferences.readLastLongitude()!!
                 }
             }
-
         }
 
         dialogBinding.linearFrom.setOnClickListener {
@@ -216,6 +228,7 @@ class AlertsFragment : Fragment(), View.OnClickListener {
                 saveAlert(
                     Alert(
                         id = System.currentTimeMillis(),
+                        location = location,
                         startDate = startDateAlert,
                         endDate = endDateAlert,
                         startTime = startTimeAlert,
@@ -240,13 +253,14 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
     private fun saveAlert(alert: Alert){
         viewModel.addAlert(alert)
-        setAlertWorker(alert.id, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
+        setAlertWorker(alert.id, alert.location, alert.startDateMillis, alert.endDateMillis, alert.latitude, alert.longitude)
     }
 
-    private fun setAlertWorker(id: Long, startMillis: Long, endMillis: Long, latitude: Double, longitude: Double){
+    private fun setAlertWorker(id: Long, location: String, startMillis: Long, endMillis: Long, latitude: Double, longitude: Double){
 
         val data = Data.Builder()
             .putLong(DATA_ALERT_ID, id)
+            .putString(DATA_LOCATION, location)
             .putDouble(DATA_LATITUDE, latitude)
             .putDouble(DATA_LONGITUDE, longitude)
             .putString(DATA_LANGUAGE, language)
@@ -315,15 +329,14 @@ class AlertsFragment : Fragment(), View.OnClickListener {
 
             val fullDate = "$schedDay-${schedMonth+1}-$schedYear/$schedHour:$schedMinute"
             val sdf = SimpleDateFormat("dd-MM-yyyy/hh:mm")
-            val dateStr = "$schedDay ${getEquivalentMonth(schedMonth)} $schedYear"
-
-
+            val dateStr = "$schedDay ${getEquivalentMonth(schedMonth)}"
 
 //            var a = "PM"
 //            if(schedHour < 12)
 //                a = "AM"
 
 //            val timeStr = "$schedHour:$schedMinute $a"
+
             val timeStr = "$schedHour:$schedMinute"
 
             try {

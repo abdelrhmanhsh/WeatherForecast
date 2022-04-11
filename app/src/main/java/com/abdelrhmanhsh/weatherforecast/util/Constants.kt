@@ -34,6 +34,7 @@ class Constants {
         const val MAPS_FROM_SETTINGS = 2
 
         const val DATA_ALERT_ID = "data_alert_id"
+        const val DATA_LOCATION = "data_location"
         const val DATA_LATITUDE = "data_latitude"
         const val DATA_LONGITUDE = "data_longitude"
         const val DATA_LANGUAGE = "data_language"

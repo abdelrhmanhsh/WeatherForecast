@@ -51,7 +51,7 @@ class MapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { googleMap ->
 
         lifecycleScope.launch {
-            val latitude = userPreferences.readGPSLatitude() ?: 0.0 //TODO replace this with readMapLatitude
+            val latitude = userPreferences.readGPSLatitude() ?: 0.0
             val longitude = userPreferences.readGPSLongitude() ?: 0.0
             println("Latitude Pref: $latitude Longitude: $longitude")
 
@@ -114,7 +114,7 @@ class MapsFragment : Fragment() {
 
                     }
                 } else {
-                    Toast.makeText(context, "Connect to Internet First to do this Operation!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
                 }
             } else {
 //                Toast.makeText(context, "Coming from settings", Toast.LENGTH_SHORT).show()
@@ -169,17 +169,24 @@ class MapsFragment : Fragment() {
             setMessage(getString(R.string.add_this_location))
             setPositiveButton(getString(R.string.save)) { dialog, which ->
 
-                lifecycleScope.launch {
-                    userPreferences.storeMapLongLatPref(latitude, longitude)
-                    userPreferences.storeLastLongLatPref(latitude, longitude)
-                    userPreferences.storeUserMapLocationPref("$city, $country")
-                    userPreferences.storeUserLastLocationPref("$city, $country")
-                    userPreferences.storeIsFavouritePref(false)
-                }
+                if (isInternetAvailable(requireContext())){
 
-                val action =
-                    MapsFragmentDirections.actionMapsToHome()
-                Navigation.findNavController(requireView()).navigate(action)
+                    lifecycleScope.launch {
+                        userPreferences.storeMapLongLatPref(latitude, longitude)
+                        userPreferences.storeLastLongLatPref(latitude, longitude)
+                        userPreferences.storeUserMapLocationPref("$city, $country")
+                        userPreferences.storeUserLastLocationPref("$city, $country")
+                        userPreferences.storeIsFavouritePref(false)
+                        userPreferences.storeLocationPref(getString(R.string.map))
+                    }
+
+                    val action =
+                        MapsFragmentDirections.actionMapsToHome()
+                    Navigation.findNavController(requireView()).navigate(action)
+
+                } else {
+                    Toast.makeText(context, getString(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+                }
 
             }
             setNegativeButton(getString(R.string.cancel)) { dialog, which ->

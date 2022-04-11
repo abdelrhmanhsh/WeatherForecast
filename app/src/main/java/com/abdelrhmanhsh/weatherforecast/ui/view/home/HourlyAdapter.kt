@@ -1,6 +1,5 @@
 package com.abdelrhmanhsh.weatherforecast.ui.view.home
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.model.response.Hourly
-import com.abdelrhmanhsh.weatherforecast.model.response.HourlyList
 import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import java.text.SimpleDateFormat
 
 class HourlyAdapter(

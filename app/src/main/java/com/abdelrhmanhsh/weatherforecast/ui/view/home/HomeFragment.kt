@@ -2,6 +2,7 @@ package com.abdelrhmanhsh.weatherforecast.ui.view.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,18 +13,17 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentHomeBinding
+import com.abdelrhmanhsh.weatherforecast.databinding.ProvideLocationDialogBinding
 import com.abdelrhmanhsh.weatherforecast.db.ConcreteLocalSource
 import com.abdelrhmanhsh.weatherforecast.model.Repository
 import com.abdelrhmanhsh.weatherforecast.model.response.WeatherResponse
@@ -35,19 +35,17 @@ import com.abdelrhmanhsh.weatherforecast.util.AppHelper.Companion.isInternetAvai
 import com.abdelrhmanhsh.weatherforecast.util.Extensions.Companion.load
 import com.abdelrhmanhsh.weatherforecast.util.PrivateConstants.Companion.API_KEY
 import com.google.android.gms.location.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
     val TAG = "HomeFragment"
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var dialogBinding: ProvideLocationDialogBinding
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var viewModelFactory: HomeViewModelFactory
@@ -84,7 +82,8 @@ class HomeFragment : Fragment() {
         initRecyclerViews()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
-//        getLastLocation()
+        locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        getLastLocation()
 
     }
 
@@ -124,6 +123,7 @@ class HomeFragment : Fragment() {
                             println("before job ${location.result.latitude}")
                             job.join()
                             println("after job ${location.result.latitude}")
+//                            initRecyclerViews()
                             getWeather()
                         }
                     }
@@ -161,7 +161,6 @@ class HomeFragment : Fragment() {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper()!!)
-        getWeather()
     }
 
     private val locationCallback: LocationCallback = object : LocationCallback() {
@@ -182,22 +181,40 @@ class HomeFragment : Fragment() {
         )
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == Constants.LOCATION_PERMISSION_ID){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                println("onRequestPermissionsResult inside")
-                getLastLocation()
-            }
+    private val locationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
+        if (isGranted) {
+            println("permission granted")
+
+//            CoroutineScope(IO).launch {
+//                withContext(Dispatchers.Main){
+//
+//                    // allow user to use the app!
+//                    getLastLocation()
+//
+//                }
+//            }
+
+            getLastLocation()
+
+        } else {
+            showInitialDialog()
+            println("permission denied")
         }
-//        else{
-////            println("onRequestPermissionsResult inside")
-//        }
-        println("onRequestPermissionsResult")
+    }
+
+    private fun showInitialDialog(){
+
+        val dialog = Dialog(requireContext())
+        dialogBinding = ProvideLocationDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
+
+        val window: Window? = dialog.window
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
     }
 
     private fun getWeather(){
@@ -208,11 +225,13 @@ class HomeFragment : Fragment() {
             var language: String = userPreferences.readLanguage()?: "en"
 
             var userLocation: String = userPreferences.readUserGPSLocation().toString()
-            var latitude: Double = userPreferences.readGPSLatitude()!! // TODO Crash here in first time
+            var latitude: Double = userPreferences.readGPSLatitude()!!
             var longitude: Double = userPreferences.readGPSLongitude()!!
 
             if (userPreferences.readIsFavourite() == true){
                 userLocation = userPreferences.readUserFavLocation().toString()
+//                latitude = userPreferences.readFavLatitude()?: 0.0
+//                longitude = userPreferences.readFavLongitude()?: 0.0
                 latitude = userPreferences.readFavLatitude()!!
                 longitude = userPreferences.readFavLongitude()!!
             } else {
@@ -360,13 +379,6 @@ class HomeFragment : Fragment() {
         super.onStart()
         if(!isLocationEnabled())
             enableLocationManager()
-        println("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        println("onResume")
-        getLastLocation()
     }
 
 }

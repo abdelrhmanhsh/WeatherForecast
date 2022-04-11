@@ -14,6 +14,7 @@ import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_END_MILLI
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_FLAG
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LANGUAGE
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LATITUDE
+import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LOCATION
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_LONGITUDE
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_START_MILLIS
 import com.abdelrhmanhsh.weatherforecast.util.Constants.Companion.DATA_UNITS
@@ -35,6 +36,7 @@ class AlertWorkerReceiver : BroadcastReceiver() {
         )!!
 
         val id = intent.getLongExtra(DATA_ALERT_ID, -1L)
+        val location = intent.getStringExtra(DATA_LOCATION)?: "Unknown"
         val latitude = intent.getDoubleExtra(DATA_LATITUDE, 0.0)
         val longitude = intent.getDoubleExtra(DATA_LONGITUDE, 0.0)
         val language = intent.getStringExtra(DATA_LANGUAGE)?: "en"
@@ -44,18 +46,19 @@ class AlertWorkerReceiver : BroadcastReceiver() {
         val sendAgain = intent.getBooleanExtra(DATA_FLAG, false)
 
         if(sendAgain) {
-            sendAlertWorker(context, id, latitude, longitude, language, units, startMillis, endMillis)
+            sendAlertWorker(context, id, location, latitude, longitude, language, units, startMillis, endMillis)
         } else {
             deleteAlertFromDatabase(id)
         }
 
     }
 
-    private fun sendAlertWorker(context: Context, id: Long, latitude: Double, longitude: Double, language: String,
+    private fun sendAlertWorker(context: Context, id: Long, location: String, latitude: Double, longitude: Double, language: String,
                                 units: String, startMillis: Long, endMillis: Long){
 
         val data = Data.Builder()
             .putLong(DATA_ALERT_ID, id)
+            .putString(DATA_LOCATION, location)
             .putDouble(DATA_LATITUDE, latitude)
             .putDouble(DATA_LONGITUDE, longitude)
             .putString(DATA_LANGUAGE, language)

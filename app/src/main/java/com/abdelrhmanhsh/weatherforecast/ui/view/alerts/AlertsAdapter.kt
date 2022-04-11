@@ -30,7 +30,6 @@ class AlertsAdapter(
         holder.imageDelete.setOnClickListener {
             deleteListener(alerts[position])
         }
-
     }
 
     fun setList(alerts: List<Alert>){

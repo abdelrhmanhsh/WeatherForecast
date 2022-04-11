@@ -33,18 +33,6 @@
             android:padding="6dp"
             android:layout_marginStart="6dp"/>
 
-<!--        <TextView-->
-<!--            android:id="@+id/current_weather_highest_lowest"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/current_date"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            android:textSize="14sp"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:text="Day 29 Night 11"-->
-<!--            android:padding="6dp"-->
-<!--            android:layout_marginStart="6dp" />-->
-
         <TextView
             android:id="@+id/current_weather"
             android:layout_width="wrap_content"

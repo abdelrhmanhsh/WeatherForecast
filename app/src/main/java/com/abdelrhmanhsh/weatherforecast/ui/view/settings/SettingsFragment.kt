@@ -1,20 +1,18 @@
 package com.abdelrhmanhsh.weatherforecast.ui.view.settings
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentSettingsBinding
-import com.abdelrhmanhsh.weatherforecast.ui.view.favourites.FavouritesFragmentDirections
 import com.abdelrhmanhsh.weatherforecast.util.Constants
 import com.abdelrhmanhsh.weatherforecast.util.UserPreferences
 import kotlinx.coroutines.launch
-import java.util.*
 
 class SettingsFragment : Fragment(), View.OnClickListener{
 
@@ -89,15 +87,17 @@ class SettingsFragment : Fragment(), View.OnClickListener{
     }
 
     private fun selectionLocation(selection: String, view: View){
-        lifecycleScope.launch {
-            userPreferences.storeLocationPref(selection)
-            userPreferences.storeIsFavouritePref(false)
-        }
+
         if(selection == getString(R.string.map)){
             val action: SettingsFragmentDirections.ActionSettingsToMaps
                     = SettingsFragmentDirections.actionSettingsToMaps()
             action.flag = Constants.MAPS_FROM_SETTINGS
             Navigation.findNavController(view).navigate(action)
+        } else {
+            lifecycleScope.launch {
+                userPreferences.storeLocationPref(selection)
+            userPreferences.storeIsFavouritePref(false)
+            }
         }
     }
 
@@ -105,7 +105,7 @@ class SettingsFragment : Fragment(), View.OnClickListener{
         lifecycleScope.launch {
             userPreferences.storeLanguagePref(selection)
         }
-//        setLanguage(selection)
+        Toast.makeText(context, getString(R.string.language_changed_alert), Toast.LENGTH_SHORT).show()
     }
 
     private fun selectionTemperature(selection: String){
@@ -119,19 +119,6 @@ class SettingsFragment : Fragment(), View.OnClickListener{
             userPreferences.storeWindSpeedPref(selection)
         }
     }
-
-//    private fun setLanguage(language: String){
-//        val resources = resources
-//        val metrics = resources.displayMetrics
-//        val configuration = resources.configuration
-//        if (language == getString(R.string.arabic)){
-//            configuration.locale = Locale("ar")
-//        } else {
-//            configuration.locale = Locale("en")
-//        }
-//        resources.updateConfiguration(configuration, metrics)
-//        onConfigurationChanged(configuration)
-//    }
 
     override fun onClick(view: View) {
         when(view.id){
