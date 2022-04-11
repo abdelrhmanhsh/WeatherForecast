@@ -60,6 +60,7 @@ dependencies {
     def location_version = "19.0.1"
     def datastore_version = "1.0.0"
     def work_version = "2.7.1"
+    def swipe_to_refresh_version = "1.1.0"
 
     // nav graph
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -102,5 +103,8 @@ dependencies {
 
     // coroutine worker
     implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    // swipe to refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_to_refresh_version"
 
 }

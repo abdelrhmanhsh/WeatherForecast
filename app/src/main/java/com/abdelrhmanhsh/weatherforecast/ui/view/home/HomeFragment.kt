@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.abdelrhmanhsh.weatherforecast.R
 import com.abdelrhmanhsh.weatherforecast.databinding.FragmentHomeBinding
 import com.abdelrhmanhsh.weatherforecast.databinding.ProvideLocationDialogBinding
@@ -40,7 +41,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     val TAG = "HomeFragment"
 
@@ -81,11 +82,15 @@ class HomeFragment : Fragment() {
 
         initRecyclerViews()
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
         locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         getLastLocation()
 
+        binding.swipeRefresh.setOnRefreshListener(this)
+
     }
+
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation(){
@@ -288,6 +293,7 @@ class HomeFragment : Fragment() {
                         println("saveWeather: location: ${saveWeather.location}")
                         println("saveWeather: lat: ${saveWeather.lat} long: ${saveWeather.lon}")
                         viewModel.insertWeather(saveWeather)
+                        binding.swipeRefresh.isRefreshing = false
                     }
                 }
 //                Toast.makeText(context, "Internet", Toast.LENGTH_SHORT).show()
@@ -302,6 +308,7 @@ class HomeFragment : Fragment() {
                         updateUI(weather, units)
                     }
                 }
+                binding.swipeRefresh.isRefreshing = false
             }
         }
     }
@@ -379,6 +386,10 @@ class HomeFragment : Fragment() {
         super.onStart()
         if(!isLocationEnabled())
             enableLocationManager()
+    }
+
+    override fun onRefresh() {
+        getLastLocation()
     }
 
 }

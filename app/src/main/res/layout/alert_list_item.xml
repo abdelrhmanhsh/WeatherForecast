@@ -6,14 +6,25 @@
     android:layout_height="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="20dp"
-    android:paddingBottom="20dp"
     android:background="@drawable/list_item_background">
+
+    <TextView
+        android:id="@+id/alert_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="10dp"/>
 
     <TextView
         android:id="@+id/alert_start_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alert_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.25"
         android:textColor="@color/white"
@@ -42,14 +53,14 @@
         android:layout_marginEnd="15dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/alert_start_time"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alert_location"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/alert_end_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alert_location"
         app:layout_constraintStart_toEndOf="@id/space"
         app:layout_constraintWidth_percent="0.25"
         android:textColor="@color/white"
