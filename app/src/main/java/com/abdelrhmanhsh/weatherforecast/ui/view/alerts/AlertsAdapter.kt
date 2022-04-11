@@ -22,6 +22,7 @@ class AlertsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        holder.alertLocation.text = alerts[position].location
         holder.alertStartDate.text = alerts[position].startDate
         holder.alertStartTime.text = alerts[position].startTime
         holder.alertEndDate.text = alerts[position].endDate
@@ -41,6 +42,9 @@ class AlertsAdapter(
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
+        val alertLocation: TextView
+            get() = itemView.findViewById(R.id.alert_location)
 
         val alertStartDate: TextView
             get() = itemView.findViewById(R.id.alert_start_date)

@@ -1,303 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.view.home.HomeFragment"
-    android:background="@color/main_app_background">
+    android:id="@+id/swipe_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        tools:context=".ui.view.home.HomeFragment"
+        android:background="@color/main_app_background">
 
-        <!-- current weather -->
-        <TextView
-            android:id="@+id/location"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:padding="14dp"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/current_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/location"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:padding="6dp"
-            android:layout_marginStart="6dp"/>
+            <!-- current weather -->
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:padding="14dp"/>
 
-        <TextView
-            android:id="@+id/current_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/current_date"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="52sp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:padding="6dp"
-            android:layout_marginStart="6dp" />
+            <TextView
+                android:id="@+id/current_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/location"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:padding="6dp"
+                android:layout_marginStart="6dp"/>
 
-        <TextView
-            android:id="@+id/feels_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/current_weather"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:padding="6dp"
-            android:layout_marginStart="6dp"/>
+            <TextView
+                android:id="@+id/current_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/current_date"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="52sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:padding="6dp"
+                android:layout_marginStart="6dp" />
 
-        <ImageView
-            android:id="@+id/current_weather_image"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/location"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintHeight_percent="0.1"
-            android:layout_marginEnd="18dp"/>
+            <TextView
+                android:id="@+id/feels_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/current_weather"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:padding="6dp"
+                android:layout_marginStart="6dp"/>
 
-        <TextView
-            android:id="@+id/current_weather_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/current_weather_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_marginEnd="24dp"/>
-
-        <!-- hourly weather -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/hourly_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/current_weather_desc"
-            android:layout_margin="15dp"/>
-
-        <!-- daily weather -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/daily_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/hourly_recycler_view"
-            android:layout_margin="15dp"/>
-
-        <!-- more info -->
-        <LinearLayout
-            android:id="@+id/linear_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/daily_recycler_view"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:layout_marginTop="15dp">
-
-            <LinearLayout
+            <ImageView
+                android:id="@+id/current_weather_image"
                 android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintHeight_percent="0.1"
+                android:layout_marginEnd="18dp"/>
+
+            <TextView
+                android:id="@+id/current_weather_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/current_weather_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_marginEnd="24dp"/>
+
+            <!-- hourly weather -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hourly_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/current_weather_desc"
+                android:layout_margin="15dp"/>
+
+            <!-- daily weather -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/daily_recycler_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
+                app:layout_constraintTop_toBottomOf="@id/hourly_recycler_view"
+                android:layout_margin="15dp"/>
 
-                <ImageView
-                    android:id="@+id/image_pressure"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/pressure" />
+            <!-- more info -->
+            <LinearLayout
+                android:id="@+id/linear_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/daily_recycler_view"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginTop="15dp">
 
-                <TextView
-                    android:id="@+id/current_pressure"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text" />
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/image_pressure"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/pressure" />
+
+                    <TextView
+                        android:id="@+id/current_pressure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="@string/pressure" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="@string/pressure" />
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/image_humidity"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/humidity" />
+
+                    <TextView
+                        android:id="@+id/current_humidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="@string/humidity" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/image_wind"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/wind" />
+
+                    <TextView
+                        android:id="@+id/current_wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="@string/wind" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
+                app:layout_constraintTop_toBottomOf="@id/linear_more"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
-                <ImageView
-                    android:id="@+id/image_humidity"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/humidity" />
-
-                <TextView
-                    android:id="@+id/current_humidity"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text" />
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/image_cloud"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/cloud" />
+
+                    <TextView
+                        android:id="@+id/current_cloud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="@string/cloud" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="@string/humidity" />
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/image_ultra_violet"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ultra_violet" />
+
+                    <TextView
+                        android:id="@+id/current_ultra_violet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="@string/ultra_violet" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/image_visibility"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/vision" />
+
+                    <TextView
+                        android:id="@+id/current_visibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondary_text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="@string/visibility" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/image_wind"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/wind" />
+    </ScrollView>
 
-                <TextView
-                    android:id="@+id/current_wind"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="@string/wind" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/linear_more"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/image_cloud"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/cloud" />
-
-                <TextView
-                    android:id="@+id/current_cloud"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="@string/cloud" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/image_ultra_violet"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ultra_violet" />
-
-                <TextView
-                    android:id="@+id/current_ultra_violet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="@string/ultra_violet" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/image_visibility"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/vision" />
-
-                <TextView
-                    android:id="@+id/current_visibility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:text="@string/visibility" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
